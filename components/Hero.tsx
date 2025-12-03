@@ -1,0 +1,119 @@
+import React, { useEffect, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
+
+const Hero: React.FC = () => {
+  const videoRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      // Performance optimization: only animate when hero is potentially visible
+      if (scrollY <= windowHeight) {
+        if (videoRef.current) {
+          // Parallax effect: Move background at half speed
+          // Scale effect: Subtle zoom out for cinematic feel
+          videoRef.current.style.transform = `translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0002})`;
+        }
+        if (contentRef.current) {
+          // Content moves slightly faster than background but slower than scroll
+          // Fade out effect
+          contentRef.current.style.transform = `translateY(${scrollY * 0.25}px)`;
+          contentRef.current.style.opacity = `${1 - Math.min(1, scrollY / (windowHeight * 0.5))}`;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      // Offset for fixed navbar (approx 80px)
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  return (
+    <section id="home" className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-black">
+      {/* Background Video Overlay with Parallax Ref */}
+      <div 
+        ref={videoRef}
+        className="absolute inset-0 z-0 will-change-transform"
+      >
+        <video 
+          autoPlay 
+          muted 
+          loop 
+          playsInline
+          className="w-full h-full object-cover opacity-80"
+          // Add a background color while video loads
+          style={{ backgroundColor: '#000000' }}
+        >
+            <source src="https://www.pexels.com/download/video/18984288/" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
+      </div>
+
+      {/* Content with Parallax Ref */}
+      <div 
+        ref={contentRef}
+        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 will-change-transform opacity-100"
+      >
+        <h2 className="text-gold-400 font-medium tracking-[0.2em] text-xs md:text-sm lg:text-base mb-3 md:mb-4 uppercase animate-fade-in-up">
+          Bienvenue chez Trevi Car Rental
+        </h2>
+        <h1 className="text-3xl md:text-6xl lg:text-7xl text-white font-serif font-bold mb-4 md:mb-6 leading-tight drop-shadow-lg">
+          Découvrez le Maroc <br />
+          <span className="italic text-gold-500">Avec Confort et Confiance</span>
+        </h1>
+        <p className="text-gray-200 text-base md:text-xl mb-8 md:mb-10 max-w-2xl mx-auto font-light leading-relaxed px-2">
+          Flotte de véhicules neufs, tarifs transparents et service client disponible 24/7. 
+          À Casablanca et ses environs, louez en toute sérénité.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full px-4 sm:px-0">
+          <a 
+            href="#booking"
+            onClick={(e) => scrollToSection(e, 'booking')}
+            className="w-full sm:w-auto bg-gold-600 hover:bg-gold-700 text-white px-8 py-3.5 rounded-full text-lg font-medium transition-all shadow-lg hover:shadow-gold-500/30 min-w-[200px] cursor-pointer"
+          >
+            Réserver
+          </a>
+          <a 
+            href="#fleet"
+            onClick={(e) => scrollToSection(e, 'fleet')}
+            className="w-full sm:w-auto bg-transparent border border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3.5 rounded-full text-lg font-medium transition-all min-w-[200px] cursor-pointer"
+          >
+            Voir la Flotte
+          </a>
+        </div>
+      </div>
+
+      {/* Scroll Indicator - Fades out naturally with contentRef logic, but we can give it distinct behavior if needed */}
+      <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 z-10 animate-bounce hidden sm:block">
+        <a 
+          href="#fleet" 
+          onClick={(e) => scrollToSection(e, 'fleet')}
+          className="text-white opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
+        >
+          <ChevronDown size={32} />
+        </a>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;

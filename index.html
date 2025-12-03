@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trevi Car Rental | Location de Voitures Récentes et Fiables au Maroc</title>
+    
+    <!-- Performance Optimization: Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://kawyqqnvckjfdchlteue.supabase.co">
+    <link rel="preconnect" href="https://picsum.photos">
+    <link rel="preconnect" href="https://gwqwcqleknpymjnihosv.supabase.co">
+    
+    <!-- Preload Fleet Images for Instant Appearance -->
+    <link rel="preload" as="image" href="https://picsum.photos/id/111/800/600">
+    <link rel="preload" as="image" href="https://picsum.photos/id/183/800/600">
+    <link rel="preload" as="image" href="https://picsum.photos/id/133/800/600">
+    <link rel="preload" as="image" href="https://picsum.photos/id/85/800/600">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: {
+                400: '#fbbf24',
+                500: '#f59e0b',
+                600: '#d97706',
+                700: '#b45309',
+              },
+              luxury: {
+                50: '#f9fafb',
+                100: '#f3f4f6',
+                900: '#111827',
+              }
+            },
+            fontFamily: {
+              serif: ['"Playfair Display"', 'serif'],
+              sans: ['"Lato"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px; /* Account for fixed navbar */
+      }
+      body {
+        font-family: 'Lato', sans-serif;
+        background-color: #ffffff;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+      }
+      
+      /* Initial Loading State Styles */
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        background-color: #ffffff;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease-out;
+      }
+      .loader-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid #f3f4f6;
+        border-top: 3px solid #d97706; /* gold-600 */
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+      .loader-text {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        color: #111827;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+      .loader-subtext {
+        font-family: 'Lato', sans-serif;
+        font-size: 0.875rem;
+        color: #d97706;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        margin-top: 8px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+</head>
+  <body>
+    <div id="root">
+      <!-- App Shell / Loading State: Visible immediately before React hydrates -->
+      <div id="initial-loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">TREVI</div>
+        <div class="loader-subtext">RENTAL</div>
+      </div>
+    </div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
