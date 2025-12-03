@@ -30,9 +30,9 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Fix Bug 1 & Bug 2: Video loading effect with proper cleanup (only for desktop)
+  // Optimized loading: Show page immediately, don't wait for video
   useEffect(() => {
-    // Skip video loading for mobile - they use image instead
+    // For mobile, show immediately since they use an image
     if (isMobile) {
       setIsVideoLoaded(true);
       if (onVideoLoadedRef.current) {
@@ -41,14 +41,38 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       return;
     }
 
+    // For desktop: Show page immediately, video loads in background
+    // Set a maximum wait time of 1.5 seconds, then show page anyway
+    const maxWaitTimeout = setTimeout(() => {
+      setIsVideoLoaded(true);
+      if (onVideoLoadedRef.current) {
+        onVideoLoadedRef.current();
+      }
+    }, 1500);
+
     const video = videoElementRef.current;
-    if (!video) return;
+    if (!video) {
+      clearTimeout(maxWaitTimeout);
+      setIsVideoLoaded(true);
+      if (onVideoLoadedRef.current) {
+        onVideoLoadedRef.current();
+      }
+      return;
+    }
 
     let timeoutId: NodeJS.Timeout | null = null;
+    let hasCalledCallback = false;
 
-    const handleVideoLoaded = () => {
+    const handleVideoReady = () => {
+      if (hasCalledCallback) return;
+      hasCalledCallback = true;
+      clearTimeout(maxWaitTimeout);
+      
       // Set slightly slower playback speed for smooth effect (0.85 = 85% speed)
-      video.playbackRate = 0.85;
+      if (video.readyState >= 2) { // HAVE_CURRENT_DATA or better
+        video.playbackRate = 0.85;
+      }
+      
       setIsVideoLoaded(true);
       if (onVideoLoadedRef.current) {
         onVideoLoadedRef.current();
@@ -56,29 +80,30 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
     };
 
     const handleVideoError = () => {
-      // Fix Bug 2: Store timeout ID for cleanup
+      if (hasCalledCallback) return;
       console.warn('Video failed to load, showing page anyway');
-      timeoutId = setTimeout(() => {
-        handleVideoLoaded();
-      }, 2000);
+      clearTimeout(maxWaitTimeout);
+      handleVideoReady();
     };
 
-    // Check if video is already loaded
-    if (video.readyState >= 3) { // HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
-      handleVideoLoaded();
+    // Check if video already has enough data to play
+    if (video.readyState >= 2) { // HAVE_CURRENT_DATA (can start playing)
+      handleVideoReady();
     } else {
-      video.addEventListener('canplaythrough', handleVideoLoaded, { once: true });
-      video.addEventListener('loadeddata', handleVideoLoaded, { once: true });
+      // Use 'loadeddata' instead of 'canplaythrough' for faster loading
+      // 'loadeddata' fires when first frame is ready (much faster)
+      video.addEventListener('loadeddata', handleVideoReady, { once: true });
+      video.addEventListener('canplay', handleVideoReady, { once: true });
       video.addEventListener('error', handleVideoError, { once: true });
     }
 
     return () => {
-      // Fix Bug 2: Cleanup timeout on unmount
+      clearTimeout(maxWaitTimeout);
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      video.removeEventListener('canplaythrough', handleVideoLoaded);
-      video.removeEventListener('loadeddata', handleVideoLoaded);
+      video.removeEventListener('loadeddata', handleVideoReady);
+      video.removeEventListener('canplay', handleVideoReady);
       video.removeEventListener('error', handleVideoError);
     };
   }, [isMobile]); // Include isMobile to re-run when mobile state changes
@@ -86,10 +111,23 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   useEffect(() => {
     let ticking = false;
     let rafId: number | null = null;
+    let lastScrollY = 0;
+    const throttleDelay = 16; // ~60fps
+    let lastUpdateTime = 0;
 
     const updateParallax = () => {
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
+      const currentTime = performance.now();
+
+      // Throttle updates to prevent excessive calculations
+      if (currentTime - lastUpdateTime < throttleDelay && Math.abs(scrollY - lastScrollY) < 5) {
+        ticking = false;
+        return;
+      }
+
+      lastScrollY = scrollY;
+      lastUpdateTime = currentTime;
 
       // Only update content fade, remove video parallax for better performance
       if (scrollY <= windowHeight * 1.5) {
@@ -149,7 +187,12 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       {/* Background Image/Video Overlay with Parallax Ref */}
       <div 
         ref={videoRef}
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 overflow-hidden"
+        style={{
+          willChange: 'auto',
+          transform: 'translateZ(0)', // GPU acceleration
+          backfaceVisibility: 'hidden',
+        }}
       >
         {isMobile ? (
           // Mobile: Use static image for faster loading
@@ -159,9 +202,16 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             className="w-full h-full object-cover opacity-80"
             style={{ 
               backgroundColor: '#000000',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              transform: 'translateZ(0) scale(1)', // GPU acceleration + prevent scaling
+              willChange: 'auto', // Don't hint will-change for static images
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              objectFit: 'cover',
+              objectPosition: 'center',
             }}
             loading="eager"
+            decoding="async"
           />
         ) : (
           // Desktop: Use video
@@ -171,7 +221,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             muted 
             loop 
             playsInline
-            preload="auto"
+            preload="metadata"
             controls={false}
             disablePictureInPicture
             disableRemotePlayback
@@ -179,7 +229,9 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             style={{ 
               backgroundColor: '#000000',
               pointerEvents: 'none',
-              WebkitPlaysinline: 'true'
+              WebkitPlaysinline: 'true',
+              transform: 'translateZ(0)', // GPU acceleration
+              backfaceVisibility: 'hidden',
             }}
           >
             <source src="/hero_bg.mp4" type="video/mp4" />
@@ -191,7 +243,11 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       {/* Content with Parallax Ref */}
       <div 
         ref={contentRef}
-        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 will-change-transform opacity-100"
+        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 opacity-100"
+        style={{
+          willChange: 'opacity', // Only hint opacity changes, not transform
+          transform: 'translateZ(0)', // GPU acceleration
+        }}
       >
         <h2 className="text-gold-400 font-medium tracking-[0.2em] text-xs md:text-sm lg:text-base mb-3 md:mb-4 uppercase animate-fade-in-up">
           Bienvenue chez Trevi Car Rental

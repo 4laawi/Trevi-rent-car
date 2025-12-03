@@ -111,31 +111,22 @@ const HomePage: React.FC = () => {
     fetchCars();
   }, []);
 
-  // Remove initial loader when React is ready and video is loaded
+  // Remove initial loader when React is ready (don't wait for video)
   useEffect(() => {
-    if (isVideoLoaded) {
-      const loader = document.getElementById('initial-loader');
-      if (loader) {
-        loader.style.opacity = '0';
-        setTimeout(() => loader.remove(), 500);
-      }
+    const loader = document.getElementById('initial-loader');
+    if (loader) {
+      // Remove loader immediately when React hydrates
+      loader.style.opacity = '0';
+      setTimeout(() => loader.remove(), 300);
     }
-  }, [isVideoLoaded]);
+  }, []);
 
   return (
     <div className="font-sans text-gray-900 bg-white">
-      {/* Show loading spinner overlay until video is loaded */}
-      {!isVideoLoaded && (
-        <div className="fixed inset-0 bg-white z-[9998] flex items-center justify-center">
-          <LoadingSpinner />
-        </div>
-      )}
-      
-      {/* Render Hero in background so video can start loading */}
-      <div className={`transition-opacity duration-500 ${isVideoLoaded ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <Navbar />
-        <Hero onVideoLoaded={handleVideoLoaded} />
-        <WhyChooseUs />
+      {/* Show content immediately - video loads in background */}
+      <Navbar />
+      <Hero onVideoLoaded={handleVideoLoaded} />
+      <WhyChooseUs />
       
       {isLoading ? (
         <div className="min-h-[400px] flex items-center justify-center">
@@ -150,20 +141,19 @@ const HomePage: React.FC = () => {
         </>
       )}
 
-        <Testimonials />
-        <Footer />
+      <Testimonials />
+      <Footer />
 
-        {/* Floating WhatsApp Action Button (Mobile/Desktop) */}
-        <a 
-          href="https://wa.me/212616925572"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-50 animate-bounce-slow"
-          aria-label="Contacter sur WhatsApp"
-        >
-          <Phone size={28} />
-        </a>
-      </div>
+      {/* Floating WhatsApp Action Button (Mobile/Desktop) */}
+      <a 
+        href="https://wa.me/212616925572"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-50 animate-bounce-slow"
+        aria-label="Contacter sur WhatsApp"
+      >
+        <Phone size={28} />
+      </a>
     </div>
   );
 };
