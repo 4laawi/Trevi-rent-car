@@ -1,33 +1,95 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onVideoLoaded?: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   const videoRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const videoElementRef = useRef<HTMLVideoElement>(null);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const video = videoElementRef.current;
+    if (!video) return;
+
+    const handleVideoLoaded = () => {
+      setIsVideoLoaded(true);
+      if (onVideoLoaded) {
+        onVideoLoaded();
+      }
+    };
+
+    const handleVideoError = () => {
+      // If video fails to load, still show the page after a short delay
+      console.warn('Video failed to load, showing page anyway');
+      setTimeout(() => {
+        handleVideoLoaded();
+      }, 2000); // Wait 2 seconds then show page even if video didn't load
+    };
+
+    // Check if video is already loaded
+    if (video.readyState >= 3) { // HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
+      handleVideoLoaded();
+    } else {
+      video.addEventListener('canplaythrough', handleVideoLoaded, { once: true });
+      video.addEventListener('loadeddata', handleVideoLoaded, { once: true });
+      video.addEventListener('error', handleVideoError, { once: true });
+    }
+
+    return () => {
+      video.removeEventListener('canplaythrough', handleVideoLoaded);
+      video.removeEventListener('loadeddata', handleVideoLoaded);
+      video.removeEventListener('error', handleVideoError);
+    };
+  }, [onVideoLoaded]);
+
+  useEffect(() => {
+    let ticking = false;
+    let rafId: number | null = null;
+
+    const updateParallax = () => {
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
 
-      // Performance optimization: only animate when hero is potentially visible
-      if (scrollY <= windowHeight) {
-        if (videoRef.current) {
-          // Parallax effect: Move background at half speed
-          // Scale effect: Subtle zoom out for cinematic feel
-          videoRef.current.style.transform = `translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0002})`;
-        }
+      // Only update content fade, remove video parallax for better performance
+      // Video parallax causes lag because video elements are expensive to transform
+      if (scrollY <= windowHeight * 1.5) {
         if (contentRef.current) {
-          // Content moves slightly faster than background but slower than scroll
-          // Fade out effect
-          contentRef.current.style.transform = `translateY(${scrollY * 0.25}px)`;
-          contentRef.current.style.opacity = `${1 - Math.min(1, scrollY / (windowHeight * 0.5))}`;
+          // Only fade out content, no movement for smoother performance
+          const opacity = 1 - Math.min(1, scrollY / (windowHeight * 0.5));
+          contentRef.current.style.opacity = `${opacity}`;
         }
+      } else {
+        // Reset when hero is out of view
+        if (contentRef.current) {
+          contentRef.current.style.opacity = '0';
+        }
+      }
+
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        rafId = requestAnimationFrame(updateParallax);
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    // Initial call to set initial state
+    updateParallax();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+    };
   }, []);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -51,16 +113,21 @@ const Hero: React.FC = () => {
       {/* Background Video Overlay with Parallax Ref */}
       <div 
         ref={videoRef}
-        className="absolute inset-0 z-0 will-change-transform"
+        className="absolute inset-0 z-0"
       >
         <video 
+          ref={videoElementRef}
           autoPlay 
           muted 
           loop 
           playsInline
+          preload="auto"
           className="w-full h-full object-cover opacity-80"
-          // Add a background color while video loads
-          style={{ backgroundColor: '#000000' }}
+          style={{ 
+            backgroundColor: '#000000',
+            transform: 'translate3d(0, 0, 0)',
+            willChange: 'transform'
+          }}
         >
             <source src="https://www.pexels.com/download/video/18984288/" type="video/mp4" />
         </video>
@@ -70,7 +137,7 @@ const Hero: React.FC = () => {
       {/* Content with Parallax Ref */}
       <div 
         ref={contentRef}
-        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 will-change-transform opacity-100"
+        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 opacity-100"
       >
         <h2 className="text-gold-400 font-medium tracking-[0.2em] text-xs md:text-sm lg:text-base mb-3 md:mb-4 uppercase animate-fade-in-up">
           Bienvenue chez Trevi Car Rental
