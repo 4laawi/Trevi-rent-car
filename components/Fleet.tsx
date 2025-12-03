@@ -204,17 +204,20 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                       <div className="flex items-baseline gap-1.5" style={{ color: car.isAvailable ? car.accentColor : '#6b7280' }}>
                          {car.promoPrice && car.promoPrice < car.pricePerDay ? (
                            <>
-                             <span className="text-base line-through text-gray-400 font-medium mr-2">{car.pricePerDay}</span>
+                             <span className="text-base line-through text-gray-400 font-medium mr-2">{car.pricePerDay} MAD</span>
                              <span className="text-4xl md:text-5xl font-black leading-none tracking-tighter shadow-gray-200 drop-shadow-sm text-red-500">
                                 {car.promoPrice}
                              </span>
+                             <span className="text-lg md:text-xl font-bold" style={{ color: '#FA8072' }}>MAD</span>
                            </>
                          ) : (
+                           <>
                             <span className="text-4xl md:text-5xl font-black leading-none tracking-tighter shadow-gray-200 drop-shadow-sm">
                                 {car.pricePerDay}
                             </span>
+                            <span className="text-lg md:text-xl font-bold opacity-80">MAD</span>
+                           </>
                          )}
-                        <span className="text-lg md:text-xl font-bold opacity-80">MAD</span>
                       </div>
                     </div>
 
