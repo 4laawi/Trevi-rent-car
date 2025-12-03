@@ -10,6 +10,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const videoElementRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   
   // Fix Bug 1: Store callback in ref to avoid effect re-runs
   const onVideoLoadedRef = useRef(onVideoLoaded);
@@ -17,6 +18,17 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   useEffect(() => {
     onVideoLoadedRef.current = onVideoLoaded;
   }, [onVideoLoaded]);
+
+  // Detect mobile device - use Pexels URL for mobile, local video for desktop
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Fix Bug 1 & Bug 2: Video loading effect with proper cleanup
   useEffect(() => {
@@ -26,6 +38,8 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
     let timeoutId: NodeJS.Timeout | null = null;
 
     const handleVideoLoaded = () => {
+      // Set slightly slower playback speed for smooth effect (0.85 = 85% speed)
+      video.playbackRate = 0.85;
       setIsVideoLoaded(true);
       if (onVideoLoadedRef.current) {
         onVideoLoadedRef.current();
@@ -135,10 +149,21 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
           loop 
           playsInline
           preload="auto"
-          className="w-full h-full object-cover opacity-80"
-          style={{ backgroundColor: '#000000' }}
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
+          className="w-full h-full object-cover opacity-80 [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
+          style={{ 
+            backgroundColor: '#000000',
+            pointerEvents: 'none',
+            WebkitPlaysinline: 'true'
+          }}
         >
+          {isMobile ? (
             <source src="https://www.pexels.com/download/video/18984288/" type="video/mp4" />
+          ) : (
+            <source src="/hero_bg.mp4" type="video/mp4" />
+          )}
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
       </div>
