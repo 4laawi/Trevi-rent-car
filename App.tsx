@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -25,6 +25,11 @@ const HomePage: React.FC = () => {
   const handleCarSelection = (carId: string) => {
     setSelectedCarId(carId);
   };
+
+  // Fix Bug 1: Memoize callback to prevent effect re-runs in Hero component
+  const handleVideoLoaded = useCallback(() => {
+    setIsVideoLoaded(true);
+  }, []);
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -129,7 +134,7 @@ const HomePage: React.FC = () => {
       {/* Render Hero in background so video can start loading */}
       <div className={`transition-opacity duration-500 ${isVideoLoaded ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <Navbar />
-        <Hero onVideoLoaded={() => setIsVideoLoaded(true)} />
+        <Hero onVideoLoaded={handleVideoLoaded} />
         <WhyChooseUs />
       
       {isLoading ? (

@@ -91,6 +91,17 @@ const Footer: React.FC = () => {
 
         <div className="border-t border-white/10 pt-8 text-center text-xs text-gray-500">
           <p>&copy; {new Date().getFullYear()} Trevi Car Rental Maroc. Tous droits réservés.</p>
+          <p className="mt-2">
+            Site web créé par{' '}
+            <a 
+              href="https://www.sitepro.ma" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gold-500 hover:text-gold-400 transition-colors underline"
+            >
+              sitepro.ma
+            </a>
+          </p>
         </div>
       </div>
     </footer>

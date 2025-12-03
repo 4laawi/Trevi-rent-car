@@ -60,18 +60,19 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
             <ScrollReveal 
               key={car.id} 
               animation="fade-up" 
-              delay={index * 150} 
-              duration={700}
+              delay={Math.min(index * 100, 500)} 
+              duration={500}
               className={`${index % 2 !== 0 ? 'md:mt-16' : ''}`}
             >
               <div 
-                className={`group relative bg-white rounded-[24px] overflow-hidden transition-all duration-500 ease-out border border-black/5 h-full flex flex-col ${!car.isAvailable ? 'opacity-80 grayscale-[0.5]' : ''}`}
+                className={`group relative bg-white rounded-[24px] overflow-hidden border border-black/5 h-full flex flex-col ${!car.isAvailable ? 'opacity-80 grayscale-[0.5]' : ''}`}
                 style={{ 
-                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)' 
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+                  willChange: 'transform'
                 }}
               >
                 {/* Hover Shadow Effect */}
-                <div className="absolute inset-0 rounded-[24px] pointer-events-none transition-shadow duration-500 group-hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"></div>
+                <div className="absolute inset-0 rounded-[24px] pointer-events-none transition-shadow duration-300 group-hover:shadow-[0_16px_48px_rgba(0,0,0,0.18)]"></div>
 
                 {/* Top Accent Stripe */}
                 <div 
@@ -84,16 +85,19 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                   <img 
                     src={car.image} 
                     alt={`${car.make} ${car.model}`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                    style={{ willChange: 'transform' }}
                   />
                   
                   {/* Gradient Overlay for Text Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none"></div>
 
                   {/* Floating Badge (Only if available) */}
                   {car.isAvailable && car.badge && (
                     <div 
-                      className="absolute top-4 right-4 md:top-6 md:right-6 text-white text-xs font-bold px-3 py-1.5 md:px-4 md:py-2 rounded-lg uppercase tracking-wide flex items-center gap-2 shadow-lg backdrop-blur-md"
+                      className="absolute top-4 right-4 md:top-6 md:right-6 text-white text-xs font-bold px-3 py-1.5 md:px-4 md:py-2 rounded-lg uppercase tracking-wide flex items-center gap-2 shadow-lg"
                       style={{ backgroundColor: `${car.accentColor}ee` }}
                     >
                       {getBadgeIcon(car.badgeIcon)}
@@ -103,7 +107,7 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
 
                   {/* Unavailable Overlay */}
                   {!car.isAvailable && (
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[2px]">
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                          <div className="bg-red-600 text-white px-6 py-2 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl border-2 border-white">
                              Indisponible
                          </div>
@@ -112,7 +116,7 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
 
                   {/* Rating Overlay */}
                   <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-white">
-                    <div className="flex items-center gap-1.5 mb-1 bg-black/30 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
+                    <div className="flex items-center gap-1.5 mb-1 bg-black/50 px-3 py-1.5 rounded-full border border-white/20">
                       <Star size={14} className="fill-gold-400 text-gold-400" />
                       <span className="font-bold text-base leading-none">{car.rating.toFixed(1)}</span>
                       <span className="text-gray-200 text-xs font-normal ml-1 border-l border-white/30 pl-2">{car.reviewCount} avis</span>
@@ -217,15 +221,25 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                     <button 
                       onClick={() => car.isAvailable && onSelectCar(car.id)}
                       disabled={!car.isAvailable}
-                      className={`w-full md:flex-grow md:max-w-[200px] h-[50px] md:h-[60px] rounded-xl text-white font-bold text-sm tracking-wide shadow-lg transition-all duration-300 flex items-center justify-center gap-3 
-                        ${car.isAvailable ? 'hover:shadow-xl group-hover:scale-[1.02] cursor-pointer' : 'bg-gray-400 cursor-not-allowed grayscale'}`}
+                      className={`w-full md:flex-grow md:max-w-[200px] h-[50px] md:h-[60px] rounded-xl text-white font-bold text-sm tracking-wide shadow-lg flex items-center justify-center gap-3 
+                        ${car.isAvailable ? 'hover:shadow-xl cursor-pointer' : 'bg-gray-400 cursor-not-allowed grayscale'}`}
                       style={{ 
                         background: car.isAvailable ? `linear-gradient(135deg, ${buttonColor}, #1f5f5b)` : undefined,
-                        boxShadow: car.isAvailable ? `0 10px 25px -5px ${buttonColor}66` : undefined
+                        boxShadow: car.isAvailable ? `0 10px 25px -5px ${buttonColor}66` : undefined,
+                        transition: 'box-shadow 0.3s ease-out, transform 0.3s ease-out',
+                        willChange: 'transform'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (car.isAvailable) {
+                          e.currentTarget.style.transform = 'scale(1.02)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
                       }}
                     >
                       {car.isAvailable ? 'RÉSERVER' : 'INDISPONIBLE'}
-                      {car.isAvailable && <ArrowRight size={20} className="opacity-80 group-hover:translate-x-1.5 transition-transform" />}
+                      {car.isAvailable && <ArrowRight size={20} className="opacity-80 transition-transform duration-300 group-hover:translate-x-1.5" />}
                     </button>
                   </div>
                 </div>

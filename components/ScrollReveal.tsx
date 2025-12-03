@@ -23,12 +23,20 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect(); // Animate only once
-        }
+      (entries) => {
+        // Use requestAnimationFrame to batch state updates
+        requestAnimationFrame(() => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setIsVisible(true);
+              observer.disconnect(); // Animate only once
+            }
+          });
+        });
       },
       {
         root: null,
@@ -37,14 +45,10 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    observer.observe(element);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+      observer.disconnect();
     };
   }, [offset]);
 
@@ -85,12 +89,13 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   return (
     <div
       ref={ref}
-      className={`transition-all ease-out ${className} ${width} ${
+      className={`transition-opacity transition-transform ease-out ${className} ${width} ${
         isVisible ? getVisibleStyle() : getInitialStyle()
       }`}
       style={{
         transitionDuration: `${duration}ms`,
         transitionDelay: `${delay}ms`,
+        willChange: isVisible ? 'auto' : 'transform, opacity',
       }}
     >
       {children}

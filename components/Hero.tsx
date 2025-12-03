@@ -10,24 +10,34 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const videoElementRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  
+  // Fix Bug 1: Store callback in ref to avoid effect re-runs
+  const onVideoLoadedRef = useRef(onVideoLoaded);
+  
+  useEffect(() => {
+    onVideoLoadedRef.current = onVideoLoaded;
+  }, [onVideoLoaded]);
 
+  // Fix Bug 1 & Bug 2: Video loading effect with proper cleanup
   useEffect(() => {
     const video = videoElementRef.current;
     if (!video) return;
 
+    let timeoutId: NodeJS.Timeout | null = null;
+
     const handleVideoLoaded = () => {
       setIsVideoLoaded(true);
-      if (onVideoLoaded) {
-        onVideoLoaded();
+      if (onVideoLoadedRef.current) {
+        onVideoLoadedRef.current();
       }
     };
 
     const handleVideoError = () => {
-      // If video fails to load, still show the page after a short delay
+      // Fix Bug 2: Store timeout ID for cleanup
       console.warn('Video failed to load, showing page anyway');
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         handleVideoLoaded();
-      }, 2000); // Wait 2 seconds then show page even if video didn't load
+      }, 2000);
     };
 
     // Check if video is already loaded
@@ -40,11 +50,15 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
     }
 
     return () => {
+      // Fix Bug 2: Cleanup timeout on unmount
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       video.removeEventListener('canplaythrough', handleVideoLoaded);
       video.removeEventListener('loadeddata', handleVideoLoaded);
       video.removeEventListener('error', handleVideoError);
     };
-  }, [onVideoLoaded]);
+  }, []); // Empty deps - callback stored in ref, so effect only runs once
 
   useEffect(() => {
     let ticking = false;
@@ -55,7 +69,6 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       const windowHeight = window.innerHeight;
 
       // Only update content fade, remove video parallax for better performance
-      // Video parallax causes lag because video elements are expensive to transform
       if (scrollY <= windowHeight * 1.5) {
         if (contentRef.current) {
           // Only fade out content, no movement for smoother performance
@@ -123,11 +136,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
           playsInline
           preload="auto"
           className="w-full h-full object-cover opacity-80"
-          style={{ 
-            backgroundColor: '#000000',
-            transform: 'translate3d(0, 0, 0)',
-            willChange: 'transform'
-          }}
+          style={{ backgroundColor: '#000000' }}
         >
             <source src="https://www.pexels.com/download/video/18984288/" type="video/mp4" />
         </video>
@@ -137,7 +146,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       {/* Content with Parallax Ref */}
       <div 
         ref={contentRef}
-        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 opacity-100"
+        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 will-change-transform opacity-100"
       >
         <h2 className="text-gold-400 font-medium tracking-[0.2em] text-xs md:text-sm lg:text-base mb-3 md:mb-4 uppercase animate-fade-in-up">
           Bienvenue chez Trevi Car Rental
