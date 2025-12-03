@@ -30,8 +30,17 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Fix Bug 1 & Bug 2: Video loading effect with proper cleanup
+  // Fix Bug 1 & Bug 2: Video loading effect with proper cleanup (only for desktop)
   useEffect(() => {
+    // Skip video loading for mobile - they use image instead
+    if (isMobile) {
+      setIsVideoLoaded(true);
+      if (onVideoLoadedRef.current) {
+        onVideoLoadedRef.current();
+      }
+      return;
+    }
+
     const video = videoElementRef.current;
     if (!video) return;
 
@@ -72,7 +81,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       video.removeEventListener('loadeddata', handleVideoLoaded);
       video.removeEventListener('error', handleVideoError);
     };
-  }, []); // Empty deps - callback stored in ref, so effect only runs once
+  }, [isMobile]); // Include isMobile to re-run when mobile state changes
 
   useEffect(() => {
     let ticking = false;
@@ -137,34 +146,45 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
 
   return (
     <section id="home" className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-black">
-      {/* Background Video Overlay with Parallax Ref */}
+      {/* Background Image/Video Overlay with Parallax Ref */}
       <div 
         ref={videoRef}
         className="absolute inset-0 z-0"
       >
-        <video 
-          ref={videoElementRef}
-          autoPlay 
-          muted 
-          loop 
-          playsInline
-          preload="auto"
-          controls={false}
-          disablePictureInPicture
-          disableRemotePlayback
-          className="w-full h-full object-cover opacity-80 [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
-          style={{ 
-            backgroundColor: '#000000',
-            pointerEvents: 'none',
-            WebkitPlaysinline: 'true'
-          }}
-        >
-          {isMobile ? (
-            <source src="https://www.pexels.com/download/video/18984288/" type="video/mp4" />
-          ) : (
+        {isMobile ? (
+          // Mobile: Use static image for faster loading
+          <img 
+            src="/Untitled design (1).webp"
+            alt="Hero background"
+            className="w-full h-full object-cover opacity-80"
+            style={{ 
+              backgroundColor: '#000000',
+              pointerEvents: 'none'
+            }}
+            loading="eager"
+          />
+        ) : (
+          // Desktop: Use video
+          <video 
+            ref={videoElementRef}
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            preload="auto"
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+            className="w-full h-full object-cover opacity-80 [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
+            style={{ 
+              backgroundColor: '#000000',
+              pointerEvents: 'none',
+              WebkitPlaysinline: 'true'
+            }}
+          >
             <source src="/hero_bg.mp4" type="video/mp4" />
-          )}
-        </video>
+          </video>
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
       </div>
 
@@ -176,7 +196,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
         <h2 className="text-gold-400 font-medium tracking-[0.2em] text-xs md:text-sm lg:text-base mb-3 md:mb-4 uppercase animate-fade-in-up">
           Bienvenue chez Trevi Car Rental
         </h2>
-        <h1 className="text-3xl md:text-6xl lg:text-7xl text-white font-serif font-bold mb-4 md:mb-6 leading-tight drop-shadow-lg">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl text-white font-serif font-bold mb-4 md:mb-6 leading-tight drop-shadow-lg">
           Découvrez le Maroc <br />
           <span className="italic text-gold-500">Avec Confort et Confiance</span>
         </h1>
