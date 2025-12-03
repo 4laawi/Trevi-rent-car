@@ -77,28 +77,21 @@
         transition: opacity 0.5s ease-out;
       }
       .loader-spinner {
-        width: 50px;
-        height: 50px;
-        border: 3px solid #f3f4f6;
-        border-top: 3px solid #d97706; /* gold-600 */
+        width: 48px;
+        height: 48px;
+        border: 2px solid #f3f4f6;
+        border-top: 2px solid #f59e0b; /* gold-500 */
         border-radius: 50%;
         animation: spin 1s linear infinite;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
       }
       .loader-text {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
-        color: #111827;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-      }
-      .loader-subtext {
         font-family: 'Lato', sans-serif;
         font-size: 0.875rem;
-        color: #d97706;
-        letter-spacing: 0.2em;
+        color: #111827;
+        font-weight: 700;
+        letter-spacing: 0.05em;
         text-transform: uppercase;
-        margin-top: 8px;
       }
       @keyframes spin {
         0% { transform: rotate(0deg); }
@@ -111,8 +104,7 @@
       <!-- App Shell / Loading State: Visible immediately before React hydrates -->
       <div id="initial-loader">
         <div class="loader-spinner"></div>
-        <div class="loader-text">TREVI</div>
-        <div class="loader-subtext">RENTAL</div>
+        <div class="loader-text">Trevi Rent car</div>
       </div>
     </div>
     <script type="module" src="/index.tsx"></script>

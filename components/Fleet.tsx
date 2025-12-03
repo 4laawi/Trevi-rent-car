@@ -81,7 +81,7 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                 />
 
                 {/* Image Section */}
-                <div className="relative h-60 md:h-80 overflow-hidden bg-gray-100 shrink-0">
+                <div className="relative h-72 md:h-96 overflow-hidden bg-gray-100 shrink-0">
                   <img 
                     src={car.image} 
                     alt={`${car.make} ${car.model}`}
@@ -125,9 +125,9 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                 </div>
 
                 {/* Content Section */}
-                <div className="p-5 md:p-9 flex flex-col flex-grow">
+                <div className="p-4 md:p-6 flex flex-col flex-grow">
                   {/* Header */}
-                  <div className="flex justify-between items-start mb-6 md:mb-8">
+                  <div className="flex justify-between items-start mb-4 md:mb-5">
                     <div>
                       <span 
                         className="block text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] mb-1 md:mb-2 opacity-80"
@@ -135,8 +135,8 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                       >
                         {car.type}
                       </span>
-                      <h3 className="text-2xl md:text-4xl font-serif text-gray-900 leading-none tracking-tight">
-                        <span className="font-semibold text-gray-600 text-lg md:text-2xl block mb-1">{car.make}</span>
+                      <h3 className="text-xl md:text-3xl font-serif text-gray-900 leading-none tracking-tight">
+                        <span className="font-semibold text-gray-600 text-base md:text-xl block mb-0.5">{car.make}</span>
                         <span className="font-bold">{car.model}</span>
                       </h3>
                     </div>
@@ -158,7 +158,7 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                   </div>
 
                   {/* Features Grid - 2 Columns */}
-                  <div className="grid grid-cols-2 gap-y-3 gap-x-4 md:gap-y-4 md:gap-x-6 mb-6 md:mb-10 flex-grow">
+                  <div className="grid grid-cols-2 gap-y-2 gap-x-4 md:gap-y-3 md:gap-x-6 mb-4 md:mb-6 flex-grow">
                     {/* Transmission */}
                     <div className="flex items-center gap-2 md:gap-3">
                       <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-50 flex items-center justify-center shrink-0 border border-gray-100">
@@ -193,10 +193,10 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                   </div>
 
                   {/* Divider */}
-                  <hr className="border-dashed border-gray-200 mb-6 md:mb-8" />
+                  <hr className="border-dashed border-gray-200 mb-4 md:mb-5" />
 
                   {/* Price & Action */}
-                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
+                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-4">
                     <div>
                       <span className="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest mb-1 block">
                         À partir de
@@ -204,24 +204,24 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                       <div className="flex items-baseline gap-1.5" style={{ color: car.isAvailable ? car.accentColor : '#6b7280' }}>
                          {car.promoPrice && car.promoPrice < car.pricePerDay ? (
                            <>
-                             <span className="text-lg line-through text-gray-400 font-medium mr-2">{car.pricePerDay}</span>
-                             <span className="text-5xl md:text-6xl font-black leading-none tracking-tighter shadow-gray-200 drop-shadow-sm text-red-500">
+                             <span className="text-base line-through text-gray-400 font-medium mr-2">{car.pricePerDay}</span>
+                             <span className="text-4xl md:text-5xl font-black leading-none tracking-tighter shadow-gray-200 drop-shadow-sm text-red-500">
                                 {car.promoPrice}
                              </span>
                            </>
                          ) : (
-                            <span className="text-5xl md:text-6xl font-black leading-none tracking-tighter shadow-gray-200 drop-shadow-sm">
+                            <span className="text-4xl md:text-5xl font-black leading-none tracking-tighter shadow-gray-200 drop-shadow-sm">
                                 {car.pricePerDay}
                             </span>
                          )}
-                        <span className="text-xl md:text-2xl font-bold opacity-80">MAD</span>
+                        <span className="text-lg md:text-xl font-bold opacity-80">MAD</span>
                       </div>
                     </div>
 
                     <button 
                       onClick={() => car.isAvailable && onSelectCar(car.id)}
                       disabled={!car.isAvailable}
-                      className={`w-full md:flex-grow md:max-w-[200px] h-[50px] md:h-[60px] rounded-xl text-white font-bold text-sm tracking-wide shadow-lg flex items-center justify-center gap-3 
+                      className={`w-full md:flex-grow md:max-w-[200px] h-[48px] md:h-[56px] rounded-xl text-white font-bold text-sm tracking-wide shadow-lg flex items-center justify-center gap-3 
                         ${car.isAvailable ? 'hover:shadow-xl cursor-pointer' : 'bg-gray-400 cursor-not-allowed grayscale'}`}
                       style={{ 
                         background: car.isAvailable ? `linear-gradient(135deg, ${buttonColor}, #1f5f5b)` : undefined,

@@ -9,7 +9,7 @@ const LoadingSpinner: React.FC = () => {
         {/* Spinning ring */}
         <div className="absolute top-0 left-0 w-12 h-12 rounded-full border-2 border-gold-500 border-t-transparent animate-spin"></div>
       </div>
-      <span className="mt-4 text-xs font-bold text-gray-400 uppercase tracking-widest animate-pulse">Chargement...</span>
+      <span className="mt-4 text-base font-serif font-bold text-gray-900 uppercase tracking-wider">Trevi Rent car</span>
     </div>
   );
 };
