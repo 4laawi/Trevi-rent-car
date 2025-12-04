@@ -450,15 +450,17 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
                 Type de Carburant *
               </label>
               <select
-                value={formData.fuel_type}
-                onChange={(e) => setFormData({ ...formData, fuel_type: e.target.value })}
+                value={formData.fuel_type === 'diesel/essence' ? 'Essence et Diesel' : formData.fuel_type}
+                onChange={(e) => {
+                  const value = e.target.value === 'Essence et Diesel' ? 'diesel/essence' : e.target.value;
+                  setFormData({ ...formData, fuel_type: value });
+                }}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
               >
                 <option value="Essence">Essence</option>
                 <option value="Diesel">Diesel</option>
-                <option value="Électrique">Électrique</option>
-                <option value="Hybride">Hybride</option>
+                <option value="Essence et Diesel">Essence et Diesel</option>
               </select>
             </div>
 
@@ -467,13 +469,17 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
                 Transmission *
               </label>
               <select
-                value={formData.gearbox}
-                onChange={(e) => setFormData({ ...formData, gearbox: e.target.value })}
+                value={formData.gearbox === 'automatique/manuelle' ? 'Automatique et Manuelle' : formData.gearbox}
+                onChange={(e) => {
+                  const value = e.target.value === 'Automatique et Manuelle' ? 'automatique/manuelle' : e.target.value;
+                  setFormData({ ...formData, gearbox: value });
+                }}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
               >
                 <option value="Manuelle">Manuelle</option>
                 <option value="Automatique">Automatique</option>
+                <option value="Automatique et Manuelle">Automatique et Manuelle</option>
               </select>
             </div>
 

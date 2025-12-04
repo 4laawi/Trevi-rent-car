@@ -160,19 +160,37 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                   {/* Features Grid - 2 Columns */}
                   <div className="grid grid-cols-2 gap-y-2 gap-x-4 md:gap-y-3 md:gap-x-6 mb-4 md:mb-6 flex-grow">
                     {/* Transmission */}
-                    <div className="flex items-center gap-2 md:gap-3">
+                    <div className="flex items-center gap-2 md:gap-3 flex-wrap">
                       <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-50 flex items-center justify-center shrink-0 border border-gray-100">
                         <Settings size={14} className="text-gray-600 md:w-4 md:h-4" />
                       </div>
-                      <span className="text-xs md:text-sm font-semibold text-gray-700">{car.transmission}</span>
+                      <div className="flex gap-1.5 flex-wrap">
+                        {car.transmission.split('/').map((transmissionType, idx) => (
+                          <span 
+                            key={idx}
+                            className="text-xs md:text-sm font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md"
+                          >
+                            {transmissionType.trim()}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                     
                     {/* Fuel */}
-                    <div className="flex items-center gap-2 md:gap-3">
+                    <div className="flex items-center gap-2 md:gap-3 flex-wrap">
                       <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-50 flex items-center justify-center shrink-0 border border-gray-100">
                         <Fuel size={14} className="text-gray-600 md:w-4 md:h-4" />
                       </div>
-                      <span className="text-xs md:text-sm font-semibold text-gray-700">{car.fuel}</span>
+                      <div className="flex gap-1.5 flex-wrap">
+                        {car.fuel.split('/').map((fuelType, idx) => (
+                          <span 
+                            key={idx}
+                            className="text-xs md:text-sm font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md"
+                          >
+                            {fuelType.trim()}
+                          </span>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Top 2 Custom Features */}

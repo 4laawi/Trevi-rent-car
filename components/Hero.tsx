@@ -30,6 +30,26 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Fix mobile viewport height issue - prevent hero from resizing on scroll
+  useEffect(() => {
+    if (!isMobile) return;
+
+    // Lock viewport height to prevent resize on scroll (iOS Safari address bar issue)
+    const setViewportHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+      window.removeEventListener('orientationchange', setViewportHeight);
+    };
+  }, [isMobile]);
+
   // Optimized loading: Show page immediately, don't wait for video
   useEffect(() => {
     // For mobile, show immediately since they use an image
@@ -109,8 +129,15 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   }, [isMobile]); // Include isMobile to re-run when mobile state changes
 
   useEffect(() => {
-    // Disable parallax effects on mobile for better performance and to prevent scroll issues
+    // Completely disable parallax effects on mobile for better performance and to prevent scroll issues
+    // Also disable on desktop to prevent any scroll-related jank
     if (isMobile) {
+      // On mobile, ensure content stays visible and no transforms are applied
+      if (contentRef.current) {
+        contentRef.current.style.opacity = '1';
+        contentRef.current.style.transform = 'none';
+        contentRef.current.style.WebkitTransform = 'none';
+      }
       return;
     }
 
@@ -140,6 +167,9 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
           // Only fade out content, no movement for smoother performance
           const opacity = 1 - Math.min(1, scrollY / (windowHeight * 0.5));
           contentRef.current.style.opacity = `${opacity}`;
+          // Ensure no transforms are applied
+          contentRef.current.style.transform = 'translateZ(0)';
+          contentRef.current.style.WebkitTransform = 'translateZ(0)';
         }
       } else {
         // Reset when hero is out of view
@@ -189,16 +219,20 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   };
 
   return (
-    <section id="home" className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-black">
+    <section 
+      id="home" 
+      className={`relative w-full flex items-center justify-center overflow-hidden bg-black ${isMobile ? '' : 'min-h-[100dvh]'}`}
+      style={isMobile ? { minHeight: 'calc(var(--vh, 1vh) * 100)' } : {}}
+    >
       {/* Background Image/Video Overlay with Parallax Ref */}
       <div 
         ref={videoRef}
         className="absolute inset-0 z-0 overflow-hidden"
         style={{
-          willChange: isMobile ? 'auto' : 'auto',
-          transform: isMobile ? 'none' : 'translateZ(0)', // No transform on mobile to prevent issues
+          willChange: 'auto',
+          transform: 'none', // Completely remove transforms on all devices to prevent scroll issues
           backfaceVisibility: 'hidden',
-          WebkitTransform: isMobile ? 'none' : 'translateZ(0)', // Prevent iOS scaling issues
+          WebkitTransform: 'none', // Prevent iOS scaling issues
         }}
       >
         {isMobile ? (
@@ -214,6 +248,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
               willChange: 'auto',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
+              WebkitTransform: 'none', // Explicitly prevent iOS transforms
               objectFit: 'cover',
               objectPosition: 'center',
               position: 'absolute',
@@ -221,6 +256,8 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
               left: 0,
               width: '100%',
               height: '100%',
+              maxWidth: '100%',
+              maxHeight: '100%',
             }}
             loading="eager"
             decoding="async"
@@ -257,8 +294,9 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
         ref={contentRef}
         className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16 md:mt-0 opacity-100"
         style={{
-          willChange: 'opacity', // Only hint opacity changes, not transform
-          transform: 'translateZ(0)', // GPU acceleration
+          willChange: isMobile ? 'auto' : 'opacity', // Only hint opacity changes on desktop
+          transform: isMobile ? 'none' : 'translateZ(0)', // No transform on mobile to prevent scroll issues
+          WebkitTransform: isMobile ? 'none' : 'translateZ(0)', // Prevent iOS transform issues
         }}
       >
         <h2 className="text-gold-400 font-medium tracking-[0.2em] text-xs md:text-sm lg:text-base mb-3 md:mb-4 uppercase animate-fade-in-up">

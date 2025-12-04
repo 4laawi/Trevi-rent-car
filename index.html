@@ -70,16 +70,38 @@
         -webkit-touch-callout: none;
       }
       /* Fix for mobile scroll issues - prevent momentum scrolling conflicts */
+      :root {
+        --vh: 1vh; /* Fallback for viewport height fix */
+      }
       @media (max-width: 768px) {
         html {
           scroll-behavior: auto; /* Disable smooth scroll on mobile to prevent conflicts */
+          height: 100%;
+          height: -webkit-fill-available; /* Fix for mobile viewport height */
         }
-        /* Prevent transform issues on hero background */
+        body {
+          min-height: 100%;
+          min-height: -webkit-fill-available; /* Fix for mobile viewport height */
+        }
+        /* Prevent transform issues on hero background and all child elements */
+        section#home,
+        section#home *,
         section#home img,
-        section#home video {
+        section#home video,
+        section#home div {
           transform: none !important;
           -webkit-transform: none !important;
           will-change: auto !important;
+          -webkit-backface-visibility: hidden !important;
+          backface-visibility: hidden !important;
+        }
+        /* Prevent any scaling on scroll */
+        section#home img {
+          max-width: 100% !important;
+          max-height: 100% !important;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
         }
       }
       h1, h2, h3, h4, h5, h6 {
