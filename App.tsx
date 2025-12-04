@@ -6,6 +6,7 @@ import WhyChooseUs from './components/WhyChooseUs';
 import Fleet from './components/Fleet';
 import BookingForm from './components/BookingForm';
 import Testimonials from './components/Testimonials';
+import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import LoadingSpinner from './components/LoadingSpinner';
 import Login from './components/Login';
@@ -142,6 +143,7 @@ const HomePage: React.FC = () => {
       )}
 
       <Testimonials />
+      <FAQ />
       <Footer />
 
       {/* Floating WhatsApp Action Button (Mobile/Desktop) */}
