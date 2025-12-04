@@ -51,6 +51,9 @@
       html {
         scroll-behavior: smooth;
         scroll-padding-top: 80px; /* Account for fixed navbar */
+        /* Prevent mobile scroll issues */
+        -webkit-overflow-scrolling: touch;
+        overflow-x: hidden;
       }
       body {
         font-family: 'Lato', sans-serif;
@@ -59,6 +62,31 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+        /* Prevent mobile scroll issues */
+        touch-action: pan-y;
+        overflow-x: hidden;
+        position: relative;
+      }
+      /* Prevent image scaling and unwanted behaviors on mobile */
+      img {
+        max-width: 100%;
+        height: auto;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+      }
+      /* Fix for mobile scroll issues - prevent momentum scrolling conflicts */
+      @media (max-width: 768px) {
+        html {
+          scroll-behavior: auto; /* Disable smooth scroll on mobile to prevent conflicts */
+        }
+        /* Prevent transform issues on hero background */
+        section#home img,
+        section#home video {
+          transform: none !important;
+          -webkit-transform: none !important;
+          will-change: auto !important;
+        }
       }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Playfair Display', serif;

@@ -109,6 +109,11 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   }, [isMobile]); // Include isMobile to re-run when mobile state changes
 
   useEffect(() => {
+    // Disable parallax effects on mobile for better performance and to prevent scroll issues
+    if (isMobile) {
+      return;
+    }
+
     let ticking = false;
     let rafId: number | null = null;
     let lastScrollY = 0;
@@ -164,7 +169,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
         cancelAnimationFrame(rafId);
       }
     };
-  }, []);
+  }, [isMobile]);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -175,9 +180,10 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
+      // Use instant scroll on mobile to prevent conflicts with momentum scrolling
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: isMobile ? 'auto' : 'smooth'
       });
     }
   };
@@ -189,13 +195,14 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
         ref={videoRef}
         className="absolute inset-0 z-0 overflow-hidden"
         style={{
-          willChange: 'auto',
-          transform: 'translateZ(0)', // GPU acceleration
+          willChange: isMobile ? 'auto' : 'auto',
+          transform: isMobile ? 'none' : 'translateZ(0)', // No transform on mobile to prevent issues
           backfaceVisibility: 'hidden',
+          WebkitTransform: isMobile ? 'none' : 'translateZ(0)', // Prevent iOS scaling issues
         }}
       >
         {isMobile ? (
-          // Mobile: Use static image for faster loading
+          // Mobile: Use static image for faster loading - no transforms to prevent scaling issues
           <img 
             src="/Untitled design (1).webp"
             alt="Hero background"
@@ -203,12 +210,17 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             style={{ 
               backgroundColor: '#000000',
               pointerEvents: 'none',
-              transform: 'translateZ(0) scale(1)', // GPU acceleration + prevent scaling
-              willChange: 'auto', // Don't hint will-change for static images
+              transform: 'none', // No transforms on mobile to prevent scaling issues
+              willChange: 'auto',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
               objectFit: 'cover',
               objectPosition: 'center',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
             }}
             loading="eager"
             decoding="async"
