@@ -233,7 +233,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             muted 
             loop 
             playsInline
-            preload="metadata"
+            preload="none"
             controls={false}
             disablePictureInPicture
             disableRemotePlayback

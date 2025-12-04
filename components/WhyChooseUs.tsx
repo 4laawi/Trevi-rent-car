@@ -26,7 +26,7 @@ const features = [
   {
     icon: <ShieldCheck size={28} />,
     title: "Assurance Complète",
-    description: "Roulez l'esprit tranquille. Notre couverture tous risques est incluse pour votre sérénité."
+    description: "Roulez l'esprit tranquille. Assurance tout risque avec franchise de minimum 5%."
   },
   {
     icon: <Eye size={28} />,
