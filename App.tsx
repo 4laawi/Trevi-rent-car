@@ -149,10 +149,10 @@ const HomePage: React.FC = () => {
         href="https://wa.me/212616925572"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-50 animate-bounce-slow"
+        className="fixed bottom-6 right-6 bg-green-500 text-white p-3 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-50 animate-bounce-slow"
         aria-label="Contacter sur WhatsApp"
       >
-        <Phone size={28} />
+        <Phone size={24} />
       </a>
     </div>
   );

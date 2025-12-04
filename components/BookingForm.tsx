@@ -9,12 +9,13 @@ interface BookingFormProps {
 }
 
 const DELIVERY_CITIES = [
+  "Aéroport Casablanca",
+  "Sur place Casablanca",
   "Tangier",
   "Marrakech",
   "Fes",
-  "Agadir",
-  "Aéroport Casablanca",
-  "Sur place Casablanca"
+  "Agadir"
+  
 ];
 
 const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {

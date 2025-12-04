@@ -5,11 +5,11 @@ const Footer: React.FC = () => {
   return (
     <footer id="contact" className="bg-gray-900 text-white pt-12 md:pt-20 pb-10">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-16 items-start">
           
           {/* Brand */}
           <div className="text-center md:text-left">
-            <div className="text-2xl font-serif font-bold tracking-wider text-white mb-4 md:mb-6">
+            <div className="text-2xl font-serif font-bold tracking-wider text-white mb-4">
               TREVI <span className="text-gold-500">RENTAL</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="text-center md:text-left">
-            <h4 className="text-lg font-bold mb-4 md:mb-6 text-gold-500">Liens Rapides</h4>
+            <h4 className="text-lg font-bold mb-4 text-gold-500">Liens Rapides</h4>
             <ul className="space-y-3 text-sm text-gray-400">
               <li><a href="#home" className="hover:text-white transition-colors">Accueil</a></li>
               <li><a href="#fleet" className="hover:text-white transition-colors">Notre Flotte</a></li>
@@ -51,10 +51,10 @@ const Footer: React.FC = () => {
 
           {/* Contact */}
           <div className="text-center md:text-left">
-            <h4 className="text-lg font-bold mb-4 md:mb-6 text-gold-500">Contactez-nous</h4>
-            <ul className="space-y-4 text-sm text-gray-400">
+            <h4 className="text-lg font-bold mb-4 text-gold-500">Contactez-nous</h4>
+            <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex items-start gap-3 justify-center md:justify-start">
-                <MapPin size={18} className="text-gold-500 mt-1 shrink-0" />
+                <MapPin size={18} className="text-gold-500 mt-0.5 shrink-0" />
                 <span>123 Boulevard Mohammed V,<br/>Casablanca, Maroc</span>
               </li>
               <li className="flex items-center gap-3 justify-center md:justify-start">
@@ -70,22 +70,6 @@ const Footer: React.FC = () => {
                 <span>contact@trevicars.ma</span>
               </li>
             </ul>
-          </div>
-
-          {/* Newsletter (Visual Only) */}
-          <div className="text-center md:text-left">
-            <h4 className="text-lg font-bold mb-4 md:mb-6 text-gold-500">Newsletter</h4>
-            <p className="text-gray-400 text-sm mb-4">Abonnez-vous pour nos offres et mises à jour.</p>
-            <div className="flex">
-              <input 
-                type="email" 
-                placeholder="Votre email" 
-                className="bg-white/10 border-none outline-none text-white px-4 py-2 rounded-l-lg w-full text-sm placeholder-gray-500 focus:ring-1 focus:ring-gold-500"
-              />
-              <button className="bg-gold-600 text-white px-4 py-2 rounded-r-lg hover:bg-gold-700 transition-colors">
-                OK
-              </button>
-            </div>
           </div>
         </div>
 
