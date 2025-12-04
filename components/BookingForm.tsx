@@ -8,10 +8,13 @@ interface BookingFormProps {
   selectedCarId: string | null;
 }
 
-const PICKUP_LOCATIONS = [
-  "Casablanca Aéroport",
-  "À l'Agence",
-  "Autre (Spécifier)"
+const DELIVERY_CITIES = [
+  "Tangier",
+  "Marrakech",
+  "Fes",
+  "Agadir",
+  "Aéroport Casablanca",
+  "Sur place Casablanca"
 ];
 
 const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
@@ -30,8 +33,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
     carId: selectedCarId || '',
     pickupDate: getToday(),
     dropoffDate: getTomorrow(),
-    location: 'Casablanca Aéroport',
-    customLocation: ''
+    delivery: ''
   });
 
   const [days, setDays] = useState<number>(1);
@@ -109,10 +111,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
     return cars.find(c => c.id === formData.carId);
   };
 
-  const getFinalLocation = () => {
-    return formData.location === 'Autre (Spécifier)' ? formData.customLocation : formData.location;
-  };
-
   const formatDateDisplay = (dateStr: string) => {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
@@ -130,14 +128,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
         setErrorMessage("Veuillez sélectionner une voiture.");
         return;
     }
+    if (!formData.delivery) {
+        setErrorMessage("Veuillez sélectionner un lieu de livraison.");
+        return;
+    }
 
     const car = getSelectedCar();
     const carName = car ? `${car.make} ${car.model}` : 'Non Sélectionné';
-    const finalLoc = getFinalLocation();
-    if (!finalLoc) {
-        setErrorMessage("Veuillez spécifier le lieu.");
-        return;
-    }
     
     // Construct WhatsApp Message
     const message = `Bonjour, je suis ${formData.name}.
@@ -145,7 +142,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
 Je souhaite réserver une ${carName} pour ${days} jours.
   
 Détails:
-- Lieu de prise en charge: ${finalLoc}
+- Livraison: ${formData.delivery}
 - Date de départ: ${formatDateDisplay(formData.pickupDate)}
 - Date de retour: ${formatDateDisplay(formData.dropoffDate)}
 - Prix total: ${totalPrice} MAD
@@ -213,40 +210,23 @@ Merci de me confirmer la disponibilité.`;
                     </select>
                   </div>
 
-                  {/* Location */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                      <div className={formData.location === 'Autre (Spécifier)' ? 'md:col-span-1' : 'md:col-span-2'}>
-                        <label className={labelStyle}>
-                          <MapPin size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Lieu de Prise en Charge
-                        </label>
-                        <select
-                          name="location"
-                          value={formData.location}
-                          onChange={handleChange}
-                          className={inputStyle}
-                        >
-                          {PICKUP_LOCATIONS.map(loc => (
-                            <option key={loc} value={loc}>{loc}</option>
-                          ))}
-                        </select>
-                      </div>
-                      
-                      {formData.location === 'Autre (Spécifier)' && (
-                        <div className="animate-fade-in">
-                            <label className={labelStyle}>
-                                <MapPin size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Précisez le lieu
-                            </label>
-                            <input
-                                type="text"
-                                name="customLocation"
-                                value={formData.customLocation}
-                                onChange={handleChange}
-                                className={inputStyle}
-                                placeholder="Ex: Hôtel Royal Mansour"
-                                required
-                            />
-                        </div>
-                      )}
+                  {/* Delivery */}
+                  <div>
+                    <label className={labelStyle}>
+                      <MapPin size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Livraison
+                    </label>
+                    <select
+                      name="delivery"
+                      value={formData.delivery}
+                      onChange={handleChange}
+                      className={inputStyle}
+                      required
+                    >
+                      <option value="">-- Choisir une ville --</option>
+                      {DELIVERY_CITIES.map(city => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </select>
                   </div>
 
                   {/* Dates - FORCED 2 COLUMNS ON MOBILE */}
@@ -289,9 +269,9 @@ Merci de me confirmer la disponibilité.`;
 
                   <button
                     type="submit"
-                    disabled={!isValid || !formData.carId || !formData.name}
+                    disabled={!isValid || !formData.carId || !formData.name || !formData.delivery}
                     className={`w-full font-bold py-3.5 md:py-4 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2 mt-2 text-white text-sm md:text-base
-                        ${(!isValid || !formData.carId || !formData.name) 
+                        ${(!isValid || !formData.carId || !formData.name || !formData.delivery) 
                             ? 'bg-gray-400 cursor-not-allowed' 
                             : 'bg-green-500 hover:bg-green-600 hover:shadow-green-500/30 hover:-translate-y-1'}`}
                   >
@@ -343,15 +323,15 @@ Merci de me confirmer la disponibilité.`;
                             </div>
                         </div>
                         
-                        {/* Location (Hidden on Mobile) */}
+                        {/* Delivery (Hidden on Mobile) */}
                         <div className="hidden md:flex items-center gap-4 transition-all duration-300">
                             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                                 <MapPin size={20} className="text-gold-400"/>
                             </div>
                             <div>
-                                <span className="block text-xs text-gray-400 uppercase tracking-wider">Lieu</span>
+                                <span className="block text-xs text-gray-400 uppercase tracking-wider">Livraison</span>
                                 <span className="font-medium text-lg">
-                                    {getFinalLocation() || 'En attente...'}
+                                    {formData.delivery || 'En attente...'}
                                 </span>
                             </div>
                         </div>
