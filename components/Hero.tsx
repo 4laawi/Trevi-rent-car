@@ -11,7 +11,6 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   const videoElementRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
   
   // Fix Bug 1: Store callback in ref to avoid effect re-runs
   const onVideoLoadedRef = useRef(onVideoLoaded);
@@ -94,8 +93,6 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
         video.playbackRate = 0.85;
       }
       
-      // Mark video as ready to play (will fade in smoothly)
-      setVideoReady(true);
       setIsVideoLoaded(true);
       if (onVideoLoadedRef.current) {
         onVideoLoadedRef.current();
@@ -283,43 +280,19 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             decoding="async"
           />
         ) : (
-          <>
-            {/* Poster image - shows immediately while video loads */}
-            <img 
-              src="/Untitled design (1).webp"
-              alt="Hero background"
-              className="w-full h-full object-cover opacity-80 absolute inset-0"
-              style={{ 
-                backgroundColor: '#000000',
-                pointerEvents: 'none',
-                transform: 'none',
-                backfaceVisibility: 'hidden',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-                zIndex: 1,
-                opacity: videoReady ? 0 : 0.8,
-                transition: 'opacity 1s ease-in-out',
-              }}
-              loading="eager"
-              decoding="async"
-            />
-            {/* Video - loads in background, fades in when ready */}
-            <video 
-              ref={videoElementRef}
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              preload="auto"
-              controls={false}
-              disablePictureInPicture
-              disableRemotePlayback
-              className={`w-full h-full object-cover [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden transition-opacity duration-1000 ${videoReady ? 'opacity-80' : 'opacity-0'}`}
+          // Desktop: Use video from Supabase
+          <video 
+            ref={videoElementRef}
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            preload="metadata"
+            crossOrigin="anonymous"
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+            className="w-full h-full object-cover opacity-80 [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
               style={{ 
                 backgroundColor: '#000000',
                 pointerEvents: 'none',
@@ -383,14 +356,11 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
               video.style.scale = '1';
             }}
             onError={(e) => {
-              console.error('Video failed to load, falling back to poster image');
-              // Keep poster image visible if video fails
-              setVideoReady(false);
+              console.error('Video failed to load');
             }}
           >
-            <source src="/hero_bg.mp4" type="video/mp4" />
+            <source src="https://gwqwcqleknpymjnihosv.supabase.co/storage/v1/object/public/car-images/hero_bg.mp4" type="video/mp4" />
           </video>
-          </>
         )}
         {/* Dark overlay for text readability - above video/poster, below content */}
         <div 
