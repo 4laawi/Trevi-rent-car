@@ -106,6 +106,16 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       handleVideoReady();
     };
 
+    // Force video to start loading immediately
+    const forceVideoLoad = () => {
+      if (video && video.readyState === 0) {
+        video.load(); // Force browser to start loading the video
+      }
+    };
+    
+    // Try to force load after a short delay to ensure DOM is ready
+    const loadTimeout = setTimeout(forceVideoLoad, 100);
+
     // Check if video already has enough data to play
     if (video.readyState >= 2) { // HAVE_CURRENT_DATA (can start playing)
       handleVideoReady();
@@ -119,6 +129,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
 
     return () => {
       clearTimeout(maxWaitTimeout);
+      clearTimeout(loadTimeout);
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
@@ -270,7 +281,8 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             muted 
             loop 
             playsInline
-            preload="none"
+            preload="metadata"
+            poster="/Untitled design (1).webp"
             controls={false}
             disablePictureInPicture
             disableRemotePlayback
@@ -282,8 +294,31 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
               transform: 'translateZ(0)', // GPU acceleration
               backfaceVisibility: 'hidden',
             }}
+            onLoadedData={(e) => {
+              // Force play when data is loaded
+              const video = e.currentTarget;
+              if (video.paused) {
+                video.play().catch(err => {
+                  console.warn('Video autoplay failed:', err);
+                });
+              }
+            }}
+            onError={(e) => {
+              console.error('Video failed to load, falling back to poster image');
+              // Video will show poster image on error
+            }}
           >
             <source src="/hero_bg.mp4" type="video/mp4" />
+            {/* Fallback to image if video fails */}
+            <img 
+              src="/Untitled design (1).webp"
+              alt="Hero background"
+              className="w-full h-full object-cover"
+              style={{ 
+                backgroundColor: '#000000',
+                pointerEvents: 'none',
+              }}
+            />
           </video>
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
