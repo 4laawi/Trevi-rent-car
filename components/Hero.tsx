@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 interface HeroProps {
@@ -11,6 +11,10 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   const videoElementRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  
+  // Cache-busting for testing - updates on each page load/refresh
+  // Remove in production or replace with version number like `?v=1.0.0`
+  const cacheBuster = useMemo(() => `?v=${Date.now()}`, []);
   
   // Fix Bug 1: Store callback in ref to avoid effect re-runs
   const onVideoLoadedRef = useRef(onVideoLoaded);
@@ -244,12 +248,19 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
           transform: 'none', // Completely remove transforms on all devices to prevent scroll issues
           backfaceVisibility: 'hidden',
           WebkitTransform: 'none', // Prevent iOS scaling issues
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100%',
+          height: '100%',
         }}
       >
         {isMobile ? (
           // Mobile: Use static image for faster loading - no transforms to prevent scaling issues
           <img 
-            src="/Untitled design (1).webp"
+            src={`/Untitled design (1).webp${cacheBuster}`}
             alt="Hero background"
             className="w-full h-full object-cover opacity-80"
             style={{ 
@@ -282,7 +293,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             loop 
             playsInline
             preload="metadata"
-            poster="/Untitled design (1).webp"
+            poster={`/Untitled design (1).webp${cacheBuster}`}
             controls={false}
             disablePictureInPicture
             disableRemotePlayback
@@ -291,32 +302,84 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
               backgroundColor: '#000000',
               pointerEvents: 'none',
               WebkitPlaysinline: 'true',
-              transform: 'translateZ(0)', // GPU acceleration
+              transform: 'none', // Remove transform to prevent zoom
               backfaceVisibility: 'hidden',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              minWidth: '100%',
+              minHeight: '100%',
+              maxWidth: '100%',
+              maxHeight: '100%',
             }}
             onLoadedData={(e) => {
               // Force play when data is loaded
               const video = e.currentTarget;
+              // Lock dimensions immediately to prevent zoom
+              video.style.transform = 'none';
+              video.style.scale = '1';
+              video.style.width = '100%';
+              video.style.height = '100%';
+              video.style.minWidth = '100%';
+              video.style.minHeight = '100%';
+              video.style.maxWidth = '100%';
+              video.style.maxHeight = '100%';
+              video.style.objectFit = 'cover';
+              video.style.objectPosition = 'center';
+              // Force no transitions
+              video.style.transition = 'none';
               if (video.paused) {
                 video.play().catch(err => {
                   console.warn('Video autoplay failed:', err);
                 });
               }
             }}
+            onLoadedMetadata={(e) => {
+              // Lock dimensions when metadata loads to prevent layout shift
+              const video = e.currentTarget;
+              video.style.transform = 'none';
+              video.style.scale = '1';
+              video.style.width = '100%';
+              video.style.height = '100%';
+              video.style.minWidth = '100%';
+              video.style.minHeight = '100%';
+              video.style.maxWidth = '100%';
+              video.style.maxHeight = '100%';
+              // Prevent any browser zoom/scale behavior
+              video.style.objectFit = 'cover';
+              video.style.objectPosition = 'center';
+            }}
+            onCanPlay={(e) => {
+              // Ensure no zoom when video can play
+              const video = e.currentTarget;
+              video.style.transform = 'none';
+              video.style.scale = '1';
+            }}
             onError={(e) => {
               console.error('Video failed to load, falling back to poster image');
               // Video will show poster image on error
             }}
           >
-            <source src="/hero_bg.mp4" type="video/mp4" />
+            <source src={`/hero_bg.mp4${cacheBuster}`} type="video/mp4" />
             {/* Fallback to image if video fails */}
             <img 
-              src="/Untitled design (1).webp"
+              src={`/Untitled design (1).webp${cacheBuster}`}
               alt="Hero background"
               className="w-full h-full object-cover"
               style={{ 
                 backgroundColor: '#000000',
                 pointerEvents: 'none',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
               }}
             />
           </video>
