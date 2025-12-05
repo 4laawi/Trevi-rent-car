@@ -34,8 +34,8 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     const fetchCars = async () => {
-      try {
-        setIsLoading(true);
+        try {
+          setIsLoading(true);
         const { data, error } = await supabase
           .from('cars')
           .select('*');
@@ -99,7 +99,23 @@ const HomePage: React.FC = () => {
                badgeIcon
              };
           });
-          setCars(mappedCars);
+          
+          // Sort cars by priority: specific models first, then the rest
+          const priorityOrder = ['kardian', 'accent', 'duster', 'creta'];
+          const sortedCars = mappedCars.sort((a, b) => {
+            const modelA = a.model.toLowerCase();
+            const modelB = b.model.toLowerCase();
+            
+            const indexA = priorityOrder.findIndex(p => modelA.includes(p));
+            const indexB = priorityOrder.findIndex(p => modelB.includes(p));
+            
+            if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+            if (indexA !== -1) return -1;
+            if (indexB !== -1) return 1;
+            return 0;
+          });
+          
+          setCars(sortedCars);
         }
       } catch (err: any) {
         console.error('Error fetching cars:', err.message);
