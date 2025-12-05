@@ -392,7 +392,11 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
           </video>
           </>
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
+        {/* Dark overlay for text readability - above video/poster, below content */}
+        <div 
+          className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"
+          style={{ zIndex: 3 }}
+        ></div>
       </div>
 
       {/* Content with Parallax Ref */}
