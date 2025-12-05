@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 interface HeroProps {
@@ -11,10 +11,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
   const videoElementRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  
-  // Cache-busting for testing - updates on each page load/refresh
-  // Remove in production or replace with version number like `?v=1.0.0`
-  const cacheBuster = useMemo(() => `?v=${Date.now()}`, []);
+  const [videoReady, setVideoReady] = useState(false);
   
   // Fix Bug 1: Store callback in ref to avoid effect re-runs
   const onVideoLoadedRef = useRef(onVideoLoaded);
@@ -97,6 +94,8 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
         video.playbackRate = 0.85;
       }
       
+      // Mark video as ready to play (will fade in smoothly)
+      setVideoReady(true);
       setIsVideoLoaded(true);
       if (onVideoLoadedRef.current) {
         onVideoLoadedRef.current();
@@ -110,15 +109,15 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
       handleVideoReady();
     };
 
-    // Force video to start loading immediately
+    // Force video to start loading immediately - don't wait
     const forceVideoLoad = () => {
       if (video && video.readyState === 0) {
         video.load(); // Force browser to start loading the video
       }
     };
     
-    // Try to force load after a short delay to ensure DOM is ready
-    const loadTimeout = setTimeout(forceVideoLoad, 100);
+    // Start loading video immediately (no delay)
+    forceVideoLoad();
 
     // Check if video already has enough data to play
     if (video.readyState >= 2) { // HAVE_CURRENT_DATA (can start playing)
@@ -133,7 +132,6 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
 
     return () => {
       clearTimeout(maxWaitTimeout);
-      clearTimeout(loadTimeout);
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
@@ -260,7 +258,7 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
         {isMobile ? (
           // Mobile: Use static image for faster loading - no transforms to prevent scaling issues
           <img 
-            src={`/Untitled design (1).webp${cacheBuster}`}
+            src="/Untitled design (1).webp"
             alt="Hero background"
             className="w-full h-full object-cover opacity-80"
             style={{ 
@@ -285,37 +283,62 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             decoding="async"
           />
         ) : (
-          // Desktop: Use video
-          <video 
-            ref={videoElementRef}
-            autoPlay 
-            muted 
-            loop 
-            playsInline
-            preload="metadata"
-            poster={`/Untitled design (1).webp${cacheBuster}`}
-            controls={false}
-            disablePictureInPicture
-            disableRemotePlayback
-            className="w-full h-full object-cover opacity-80 [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
-            style={{ 
-              backgroundColor: '#000000',
-              pointerEvents: 'none',
-              WebkitPlaysinline: 'true',
-              transform: 'none', // Remove transform to prevent zoom
-              backfaceVisibility: 'hidden',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              objectPosition: 'center',
-              minWidth: '100%',
-              minHeight: '100%',
-              maxWidth: '100%',
-              maxHeight: '100%',
-            }}
+          <>
+            {/* Poster image - shows immediately while video loads */}
+            <img 
+              src="/Untitled design (1).webp"
+              alt="Hero background"
+              className="w-full h-full object-cover opacity-80 absolute inset-0"
+              style={{ 
+                backgroundColor: '#000000',
+                pointerEvents: 'none',
+                transform: 'none',
+                backfaceVisibility: 'hidden',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                zIndex: 1,
+                opacity: videoReady ? 0 : 0.8,
+                transition: 'opacity 1s ease-in-out',
+              }}
+              loading="eager"
+              decoding="async"
+            />
+            {/* Video - loads in background, fades in when ready */}
+            <video 
+              ref={videoElementRef}
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              preload="auto"
+              controls={false}
+              disablePictureInPicture
+              disableRemotePlayback
+              className={`w-full h-full object-cover [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden transition-opacity duration-1000 ${videoReady ? 'opacity-80' : 'opacity-0'}`}
+              style={{ 
+                backgroundColor: '#000000',
+                pointerEvents: 'none',
+                WebkitPlaysinline: 'true',
+                transform: 'none', // Remove transform to prevent zoom
+                backfaceVisibility: 'hidden',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                minWidth: '100%',
+                minHeight: '100%',
+                maxWidth: '100%',
+                maxHeight: '100%',
+                zIndex: 2,
+              }}
             onLoadedData={(e) => {
               // Force play when data is loaded
               const video = e.currentTarget;
@@ -330,8 +353,8 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
               video.style.maxHeight = '100%';
               video.style.objectFit = 'cover';
               video.style.objectPosition = 'center';
-              // Force no transitions
-              video.style.transition = 'none';
+              
+              // Start playing video
               if (video.paused) {
                 video.play().catch(err => {
                   console.warn('Video autoplay failed:', err);
@@ -361,28 +384,13 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             }}
             onError={(e) => {
               console.error('Video failed to load, falling back to poster image');
-              // Video will show poster image on error
+              // Keep poster image visible if video fails
+              setVideoReady(false);
             }}
           >
-            <source src={`/hero_bg.mp4${cacheBuster}`} type="video/mp4" />
-            {/* Fallback to image if video fails */}
-            <img 
-              src={`/Untitled design (1).webp${cacheBuster}`}
-              alt="Hero background"
-              className="w-full h-full object-cover"
-              style={{ 
-                backgroundColor: '#000000',
-                pointerEvents: 'none',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-              }}
-            />
+            <source src="/hero_bg.mp4" type="video/mp4" />
           </video>
+          </>
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70"></div>
       </div>
