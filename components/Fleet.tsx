@@ -217,18 +217,18 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                   {car.accessories && car.accessories.length > 0 && (
                     <div className="mb-4 md:mb-5">
                       <div className="flex items-center gap-2 mb-2">
-                        <Package size={14} className="text-gray-500 md:w-4 md:h-4" />
-                        <span className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-wider">Accessoires</span>
+                        <Package size={16} className="text-gray-500 md:w-5 md:h-5" />
+                        <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Accessoires</span>
                       </div>
                       <div className="flex flex-wrap gap-1.5 md:gap-2">
                         {car.accessories.map((accessory, idx) => {
                           // Get icon for each accessory
                           const getAccessoryIcon = () => {
                             if (accessory.toLowerCase().includes('jawaz') || accessory.toLowerCase().includes('reseau')) {
-                              return <Wifi size={12} className="text-gray-600 md:w-3 md:h-3" />;
+                              return <Wifi size={16} className="text-gray-600 md:w-4 md:h-4" />;
                             }
                             if (accessory.toLowerCase().includes('siège') || accessory.toLowerCase().includes('baby') || accessory.toLowerCase().includes('enfant')) {
-                              return <Baby size={12} className="text-gray-600 md:w-3 md:h-3" />;
+                              return <Baby size={16} className="text-gray-600 md:w-4 md:h-4" />;
                             }
                             return null;
                           };
@@ -236,7 +236,7 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                           return (
                             <span 
                               key={idx}
-                              className="text-[10px] md:text-xs font-semibold text-gray-600 bg-gold-50 border border-gold-200 px-2 py-1 rounded-md flex items-center gap-1.5"
+                              className="text-xs md:text-sm font-semibold text-gray-600 bg-gold-50 border border-gold-200 px-3 py-1.5 rounded-md flex items-center gap-2"
                             >
                               {getAccessoryIcon()}
                               {accessory}
