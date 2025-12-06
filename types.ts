@@ -11,6 +11,7 @@ export interface SupabaseCar {
   image_url: string;
   is_available: boolean;
   description?: string | null;
+  accessories?: string | null; // Comma-separated string or JSON array
 }
 
 export interface Car {
@@ -23,6 +24,7 @@ export interface Car {
   pricePerDay: number; // in MAD
   promoPrice?: number | null; // New field for discounts
   features: string[];
+  accessories?: string[]; // New field for accessories
   image: string;
   description?: string;
   isAvailable: boolean;

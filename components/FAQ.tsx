@@ -46,7 +46,7 @@ const faqData: FAQItem[] = [
   },
   {
     question: "Les voitures sont-elles assurées ?",
-    answer: "Oui, toutes nos voitures sont assurées assurance tout risque."
+    answer: "Oui, toutes nos voitures sont assurées assurance tout risque avec franchise de 5%."
   }
 ];
 

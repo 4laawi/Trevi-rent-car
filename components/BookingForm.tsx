@@ -10,7 +10,7 @@ interface BookingFormProps {
 
 const DELIVERY_CITIES = [
   "Aéroport Casablanca",
-  "Sur place Casablanca",
+  "Casa Ville",
   "Tangier",
   "Marrakech",
   "Fes",

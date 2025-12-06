@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { SupabaseCar } from '../types';
@@ -127,7 +127,17 @@ const Dashboard: React.FC = () => {
                   {car.brand} {car.name}
                 </h3>
                 <div className="space-y-1 text-sm text-gray-600 mb-4">
-                  <p><span className="font-medium">Prix:</span> {car.price_per_day} MAD/jour</p>
+                  <p>
+                    <span className="font-medium">Prix:</span>{' '}
+                    {car.promo_price && car.promo_price < car.price_per_day ? (
+                      <>
+                        <span className="line-through text-gray-400">{car.price_per_day}</span>{' '}
+                        <span className="text-red-600 font-semibold">{car.promo_price}</span> MAD/jour
+                      </>
+                    ) : (
+                      <>{car.price_per_day} MAD/jour</>
+                    )}
+                  </p>
                   <p><span className="font-medium">Carburant:</span> {car.fuel_type}</p>
                   <p><span className="font-medium">Transmission:</span> {car.gearbox}</p>
                   <p><span className="font-medium">Catégorie:</span> {car.category}</p>
@@ -207,7 +217,8 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
   const [formData, setFormData] = useState({
     name: car?.name || '',
     brand: car?.brand || '',
-    price_per_day: car?.price_per_day || 0,
+    price_per_day: car?.price_per_day ? String(Math.round(Number(car.price_per_day))) : '',
+    promo_price: car?.promo_price ? String(Math.round(Number(car.promo_price))) : '',
     fuel_type: car?.fuel_type || 'Essence',
     gearbox: car?.gearbox || 'Manuelle',
     category: car?.category || 'Berline',
@@ -218,6 +229,8 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
   const [imagePreview, setImagePreview] = useState<string | null>(car?.image_url || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const priceInputRef = useRef<HTMLInputElement>(null);
+  const promoInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -305,7 +318,7 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -326,17 +339,47 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
         }
       }
 
+      // Get price values directly from input refs to ensure we have the latest values
+      // This is especially important when Enter key is pressed
+      const pricePerDayValue = (priceInputRef.current?.value || String(formData.price_per_day)).trim();
+      const pricePerDay = pricePerDayValue === '' ? 0 : parseInt(pricePerDayValue, 10);
+      
+      if (isNaN(pricePerDay) || pricePerDay < 0) {
+        setError('Le prix par jour doit être un nombre valide');
+        setLoading(false);
+        return;
+      }
+      
+      let promoPrice: number | null = null;
+      const promoPriceValue = (promoInputRef.current?.value || String(formData.promo_price || '')).trim();
+      if (promoPriceValue !== '') {
+        const parsed = parseInt(promoPriceValue, 10);
+        if (!isNaN(parsed) && parsed >= 0) {
+          promoPrice = parsed;
+        }
+      }
+
       const carData = {
-        name: formData.name,
-        brand: formData.brand,
-        price_per_day: Number(formData.price_per_day),
-        fuel_type: formData.fuel_type,
-        gearbox: formData.gearbox,
-        category: formData.category,
-        is_available: formData.is_available,
-        description: formData.description || null,
-        image_url: imageUrl, // Always include image_url, whether new or existing
+        name: String(formData.name),
+        brand: String(formData.brand),
+        price_per_day: pricePerDay,
+        promo_price: promoPrice,
+        fuel_type: String(formData.fuel_type),
+        gearbox: String(formData.gearbox),
+        category: String(formData.category),
+        is_available: Boolean(formData.is_available),
+        description: formData.description ? String(formData.description) : null,
+        image_url: String(imageUrl), // Always include image_url, whether new or existing
       };
+
+      // Debug logging
+      console.log('Form data before save:', {
+        original_price_per_day: formData.price_per_day,
+        original_promo_price: formData.promo_price,
+        processed_price_per_day: pricePerDay,
+        processed_promo_price: promoPrice,
+        carData: carData
+      });
 
       if (car) {
         // Update existing car
@@ -355,7 +398,30 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
           throw new Error('Aucune donnée retournée après la mise à jour');
         }
         
+        // Debug logging - check what was actually saved
         console.log('Car updated successfully:', data);
+        console.log('Price comparison:', {
+          sent_price_per_day: carData.price_per_day,
+          received_price_per_day: data[0]?.price_per_day,
+          sent_promo_price: carData.promo_price,
+          received_promo_price: data[0]?.promo_price,
+        });
+        
+        // If the saved value doesn't match what we sent, show a warning
+        if (data[0]?.price_per_day !== carData.price_per_day) {
+          console.warn('WARNING: Price mismatch!', {
+            sent: carData.price_per_day,
+            received: data[0]?.price_per_day,
+            difference: carData.price_per_day - data[0]?.price_per_day
+          });
+        }
+        if (carData.promo_price !== null && data[0]?.promo_price !== carData.promo_price) {
+          console.warn('WARNING: Promo price mismatch!', {
+            sent: carData.promo_price,
+            received: data[0]?.promo_price,
+            difference: carData.promo_price - data[0]?.promo_price
+          });
+        }
       } else {
         // Create new car
         const { data, error } = await supabase
@@ -436,11 +502,67 @@ const CarFormModal: React.FC<CarFormModalProps> = ({ car, onClose, onSuccess }) 
                 Prix par Jour (MAD) *
               </label>
               <input
-                type="number"
+                ref={priceInputRef}
+                type="text"
+                inputMode="numeric"
                 value={formData.price_per_day}
-                onChange={(e) => setFormData({ ...formData, price_per_day: Number(e.target.value) })}
+                onChange={(e) => {
+                  const rawValue = e.target.value;
+                  // Allow empty string for typing
+                  if (rawValue === '') {
+                    setFormData({ ...formData, price_per_day: '' });
+                    return;
+                  }
+                  
+                  // Only allow digits
+                  const cleanValue = rawValue.replace(/\D/g, '');
+                  if (cleanValue !== '') {
+                    setFormData({ ...formData, price_per_day: cleanValue });
+                  }
+                }}
+                onBlur={(e) => {
+                  // Ensure value is properly set on blur
+                  const value = e.target.value.trim();
+                  if (value === '') {
+                    setFormData({ ...formData, price_per_day: '' });
+                  }
+                }}
                 required
-                min="0"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Prix Promo (MAD) <span className="text-gray-500 text-xs">(optionnel)</span>
+              </label>
+              <input
+                ref={promoInputRef}
+                type="text"
+                inputMode="numeric"
+                value={formData.promo_price}
+                onChange={(e) => {
+                  const rawValue = e.target.value;
+                  // Allow empty string for typing
+                  if (rawValue === '') {
+                    setFormData({ ...formData, promo_price: '' });
+                    return;
+                  }
+                  
+                  // Only allow digits
+                  const cleanValue = rawValue.replace(/\D/g, '');
+                  if (cleanValue !== '') {
+                    setFormData({ ...formData, promo_price: cleanValue });
+                  }
+                }}
+                onBlur={(e) => {
+                  // Ensure value is properly set on blur
+                  const value = e.target.value.trim();
+                  if (value === '') {
+                    setFormData({ ...formData, promo_price: '' });
+                  }
+                }}
+                placeholder="Laissez vide si pas de promo"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent"
               />
             </div>

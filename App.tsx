@@ -88,6 +88,7 @@ const HomePage: React.FC = () => {
                pricePerDay: row.price_per_day,
                promoPrice: row.promo_price,
                features: ['Climatisation', 'Bluetooth', 'Sécurité ABS', 'GPS'], // Default features as they aren't in DB
+               accessories: ['Sièges auto', 'JAWAZ'], // Hardcoded accessories for all cars
                image: row.image_url,
                description: row.description || undefined,
                isAvailable: row.is_available,
