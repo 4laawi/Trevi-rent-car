@@ -13,8 +13,8 @@ const Footer: React.FC = () => {
               TREVI <span className="text-gold-500">RENTAL</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Services de location de voitures modernes partout au Maroc. 
-              Fiable, abordable et confortable. Votre voyage commence avec nous.
+              Agence de location de voiture à Casablanca. Location de voiture Casablanca aéroport et centre-ville. 
+              Services de location de voitures modernes partout au Maroc. Fiable, abordable et confortable.
             </p>
             <div className="flex gap-4 justify-center md:justify-start">
               <a 
@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex items-start gap-3 justify-center md:justify-start">
                 <MapPin size={18} className="text-gold-500 mt-0.5 shrink-0" />
-                <span>123 Boulevard Mohammed V,<br/>Casablanca, Maroc</span>
+                <span>Casablanca, Maroc</span>
               </li>
               <li className="flex items-center gap-3 justify-center md:justify-start">
                 <Phone size={18} className="text-gold-500 shrink-0" />

@@ -143,24 +143,26 @@ const HomePage: React.FC = () => {
     <div className="font-sans text-gray-900 bg-white">
       {/* Show content immediately - video loads in background */}
       <Navbar />
-      <Hero onVideoLoaded={handleVideoLoaded} />
-      <WhyChooseUs />
-      
-      {isLoading ? (
-        <div className="min-h-[400px] flex items-center justify-center">
-            <LoadingSpinner />
-        </div>
-      ) : error ? (
-        <div className="text-center py-20 text-red-500 font-bold">{error}</div>
-      ) : (
-        <>
-            <Fleet cars={cars} onSelectCar={handleCarSelection} />
-            <BookingForm cars={cars} selectedCarId={selectedCarId} />
-        </>
-      )}
+      <main>
+        <Hero onVideoLoaded={handleVideoLoaded} />
+        <WhyChooseUs />
+        
+        {isLoading ? (
+          <div className="min-h-[400px] flex items-center justify-center">
+              <LoadingSpinner />
+          </div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-500 font-bold">{error}</div>
+        ) : (
+          <>
+              <Fleet cars={cars} onSelectCar={handleCarSelection} />
+              <BookingForm cars={cars} selectedCarId={selectedCarId} />
+          </>
+        )}
 
-      <Testimonials />
-      <FAQ />
+        <Testimonials />
+        <FAQ />
+      </main>
       <Footer />
 
       {/* Floating WhatsApp Action Button (Mobile/Desktop) */}

@@ -47,12 +47,12 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <ScrollReveal animation="fade-up" duration={800}>
           <div className="text-center mb-10 md:mb-20">
-            <span className="text-gold-600 font-bold tracking-[0.2em] uppercase text-xs mb-3 block">Notre Flotte</span>
+            <span className="text-gold-600 font-bold tracking-[0.2em] uppercase text-xs mb-3 block">Location de Voiture Casablanca</span>
             <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 leading-tight">
-              Choisissez Votre <br/>Compagnon de Route
+              Flotte de Location de Voiture <br/>à Casablanca
             </h2>
             <p className="mt-4 md:mt-6 text-gray-500 max-w-2xl mx-auto font-light text-base md:text-lg">
-              Une sélection rigoureuse de véhicules récents, entretenus à la perfection pour votre confort et sécurité au Maroc.
+              Agence de location de voiture à Casablanca. Une sélection rigoureuse de véhicules récents pour votre location de voiture au Maroc. Entretenus à la perfection pour votre confort et sécurité.
             </p>
           </div>
         </ScrollReveal>
@@ -87,7 +87,7 @@ const Fleet: React.FC<FleetProps> = ({ cars, onSelectCar }) => {
                 <div className="relative h-72 md:h-96 overflow-hidden bg-gray-100 shrink-0">
                   <img 
                     src={car.image} 
-                    alt={`${car.make} ${car.model}`}
+                    alt={`${car.make} ${car.model} - Location de voiture ${car.type} à Casablanca, Maroc - ${car.pricePerDay} MAD/jour`}
                     className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     loading="lazy"
                     decoding="async"

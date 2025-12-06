@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
             <a href="#home" className="block">
                 <img 
                     src="https://kawyqqnvckjfdchlteue.supabase.co/storage/v1/object/sign/resumes/Untitled%20design.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWMwZGE5Ni1hYTZhLTQwZWMtYjgwNC05MjJmM2MzODJkZWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJyZXN1bWVzL1VudGl0bGVkIGRlc2lnbi5wbmciLCJpYXQiOjE3NjQ3MDU0MzksImV4cCI6MTc5NjI0MTQzOX0.kDkzdst7KmRY9N-mIsJM1FnfBX544rIL5PDys2qnyvw" 
-                    alt="Trevi Rental Logo" 
+                    alt="Trevi Car Rental - Agence de Location de Voiture Casablanca" 
                     className="h-10 md:h-14 w-auto object-contain transition-all duration-300"
                     style={{
                       filter: isScrolled 
