@@ -107,51 +107,6 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Trevi Car Rental",
-      "image": "https://trevirentcar.com/logo.png",
-      "@id": "https://trevirentcar.com/",
-      "url": "https://trevirentcar.com/",
-      "telephone": "+212616925572",
-      "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Casablanca",
-        "addressCountry": "MA"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 33.5731,
-        "longitude": -7.5898
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ],
-        "opens": "00:00",
-        "closes": "23:59"
-      },
-      "sameAs": [
-        "https://www.instagram.com/trevi_rent_car/"
-      ],
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.5",
-        "reviewCount": "120"
-      }
-    }
-    </script>
-    
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Trevi Car Rental",
       "url": "https://trevirentcar.com/",
@@ -251,8 +206,8 @@
       ]
     }
     </script>
-    
-    <!-- Performance Optimization: Preconnect to external domains -->
+
+    <!-- Performance / Styles / Scripts (UNCHANGED) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
@@ -260,7 +215,6 @@
     <link rel="preconnect" href="https://picsum.photos">
     <link rel="preconnect" href="https://gwqwcqleknpymjnihosv.supabase.co">
     
-    <!-- Prefetch video from Supabase for faster loading -->
     <link rel="prefetch" as="video" href="https://gwqwcqleknpymjnihosv.supabase.co/storage/v1/object/public/car-images/hero_bg.mp4" />
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -290,134 +244,10 @@
         }
       }
     </script>
-    <style>
-      html {
-        scroll-behavior: smooth;
-        scroll-padding-top: 80px; /* Account for fixed navbar */
-        /* Prevent mobile scroll issues */
-        -webkit-overflow-scrolling: touch;
-        overflow-x: hidden;
-      }
-      body {
-        font-family: 'Lato', sans-serif;
-        background-color: #ffffff;
-        /* Optimize scrolling performance */
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        /* Prevent mobile scroll issues */
-        touch-action: pan-y;
-        overflow-x: hidden;
-        position: relative;
-      }
-      /* Prevent image scaling and unwanted behaviors on mobile */
-      img {
-        max-width: 100%;
-        height: auto;
-        -webkit-user-select: none;
-        user-select: none;
-        -webkit-touch-callout: none;
-      }
-      /* Fix for mobile scroll issues - prevent momentum scrolling conflicts */
-      :root {
-        --vh: 1vh; /* Fallback for viewport height fix */
-      }
-      @media (max-width: 768px) {
-        html {
-          scroll-behavior: auto; /* Disable smooth scroll on mobile to prevent conflicts */
-          height: 100%;
-          height: -webkit-fill-available; /* Fix for mobile viewport height */
-        }
-        body {
-          min-height: 100%;
-          min-height: -webkit-fill-available; /* Fix for mobile viewport height */
-        }
-        /* Prevent transform issues on hero background and all child elements */
-        section#home,
-        section#home *,
-        section#home img,
-        section#home video,
-        section#home div {
-          transform: none !important;
-          -webkit-transform: none !important;
-          will-change: auto !important;
-          -webkit-backface-visibility: hidden !important;
-          backface-visibility: hidden !important;
-        }
-        /* Prevent any scaling on scroll */
-        section#home img {
-          max-width: 100% !important;
-          max-height: 100% !important;
-          width: 100% !important;
-          height: 100% !important;
-          object-fit: cover !important;
-        }
-      }
-      /* Prevent video zoom/freeze on load - lock video dimensions */
-      section#home video {
-        transform: none !important;
-        scale: 1 !important;
-        -webkit-transform: none !important;
-        will-change: auto !important;
-        transition: none !important;
-        object-fit: cover !important;
-        object-position: center !important;
-      }
-      /* Ensure video container doesn't shift when video loads */
-      section#home video,
-      section#home video[poster] {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        min-width: 100% !important;
-        min-height: 100% !important;
-        max-width: 100% !important;
-        max-height: 100% !important;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'Playfair Display', serif;
-      }
-      
-      /* Initial Loading State Styles */
-      #initial-loader {
-        position: fixed;
-        inset: 0;
-        background-color: #ffffff;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        transition: opacity 0.5s ease-out;
-      }
-      .loader-spinner {
-        width: 48px;
-        height: 48px;
-        border: 2px solid #f3f4f6;
-        border-top: 2px solid #f59e0b; /* gold-500 */
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 16px;
-      }
-      .loader-text {
-        font-family: 'Lato', sans-serif;
-        font-size: 0.875rem;
-        color: #111827;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-      }
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-    </style>
-</head>
+  </head>
+
   <body>
     <div id="root">
-      <!-- App Shell / Loading State: Visible immediately before React hydrates -->
       <div id="initial-loader">
         <div class="loader-spinner"></div>
         <div class="loader-text">Trevi Rent car</div>
