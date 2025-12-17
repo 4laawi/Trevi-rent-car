@@ -210,7 +210,10 @@
     <link rel="preconnect" href="https://picsum.photos">
     <link rel="preconnect" href="https://gwqwcqleknpymjnihosv.supabase.co">
     
-    <link rel="prefetch" as="video" href="https://gwqwcqleknpymjnihosv.supabase.co/storage/v1/object/public/car-images/hero_bg.mp4" />
+    <!-- Preload hero poster image for instant display -->
+    <link rel="preload" as="image" href="/first-frame.webp" />
+    <!-- Preload hero video with lower priority (poster shows first) -->
+    <link rel="preload" as="video" href="https://gwqwcqleknpymjnihosv.supabase.co/storage/v1/object/public/car-images/hero_bg.mp4" />
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">

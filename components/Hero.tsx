@@ -280,21 +280,22 @@ const Hero: React.FC<HeroProps> = ({ onVideoLoaded }) => {
             decoding="async"
           />
         ) : (
-          // Desktop: Use video from Supabase
+          // Desktop: Use video from Supabase with poster for instant display
           <video 
             ref={videoElementRef}
             autoPlay 
             muted 
             loop 
             playsInline
-            preload="metadata"
+            preload="auto"
             crossOrigin="anonymous"
             controls={false}
             disablePictureInPicture
             disableRemotePlayback
+            poster="/first-frame.webp"
             className="w-full h-full object-cover opacity-80 [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
               style={{ 
-                backgroundColor: '#000000',
+                backgroundColor: '#1a1a1a',
                 pointerEvents: 'none',
                 WebkitPlaysinline: 'true',
                 transform: 'none', // Remove transform to prevent zoom
