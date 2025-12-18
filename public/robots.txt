@@ -4,7 +4,7 @@ Disallow: /dashboard
 Disallow: /login
 
 # Sitemap location
-Sitemap: https://trevirentcar.com/sitemap.xml
+Sitemap: https://www.trevirentcarlocation.ma/sitemap.xml
 
 # Crawl-delay (optional, helps prevent server overload)
 Crawl-delay: 1
