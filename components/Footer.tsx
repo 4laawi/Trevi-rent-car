@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Phone, Mail, MapPin } from 'lucide-react';
+import { LOCATIONS } from '../lib/locationsData';
 
 const Footer: React.FC = () => {
   return (
     <footer id="contact" className="bg-gray-900 text-white pt-12 md:pt-20 pb-10">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-16 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16 items-start">
           
           {/* Brand */}
           <div className="text-center md:text-left">
@@ -38,14 +40,30 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
+          {/* Nos Agences */}
+          <div className="text-center md:text-left">
+            <h4 className="text-lg font-bold mb-4 text-gold-500">Nos Agences</h4>
+            <ul className="space-y-3 text-sm text-gray-400">
+              {LOCATIONS.map(loc => (
+                <li key={loc.slug}>
+                  <Link to={`/location/${loc.slug}`} className="hover:text-white transition-colors">
+                    Location voiture {loc.cityName}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Quick Links */}
           <div className="text-center md:text-left">
             <h4 className="text-lg font-bold mb-4 text-gold-500">Liens Rapides</h4>
             <ul className="space-y-3 text-sm text-gray-400">
-              <li><a href="#home" className="hover:text-white transition-colors">Accueil</a></li>
-              <li><a href="#fleet" className="hover:text-white transition-colors">Notre Flotte</a></li>
-              <li><a href="#booking" className="hover:text-white transition-colors">Réservation</a></li>
-              <li><a href="#reviews" className="hover:text-white transition-colors">Avis</a></li>
+              <li><a href="/#home" className="hover:text-white transition-colors">Accueil</a></li>
+              <li><a href="/#fleet" className="hover:text-white transition-colors">Notre Flotte</a></li>
+              <li><a href="/#booking" className="hover:text-white transition-colors">Réservation</a></li>
+              <li><a href="/#reviews" className="hover:text-white transition-colors">Avis</a></li>
+              <li className="pt-2 border-t border-white/5"><Link to="/privacy" className="hover:text-white transition-colors">Politique de Confidentialité</Link></li>
+              <li><Link to="/terms" className="hover:text-white transition-colors">Conditions Générales</Link></li>
             </ul>
           </div>
 

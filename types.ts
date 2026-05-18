@@ -55,3 +55,25 @@ export interface BookingRequest {
   dropoffDate: string;
   city: string;
 }
+
+export interface LocationFAQ {
+  question: string;
+  answer: string;
+}
+
+export interface LocationData {
+  slug: string;
+  cityName: string;
+  title: string;
+  metaDescription: string;
+  h1: string;
+  introDescription: string;
+  bodyText1: string;
+  bodyText2: string;
+  deliveryDetails: string;
+  branchAddress: string;
+  phone: string;
+  latitude: number;
+  longitude: number;
+  faqs: LocationFAQ[];
+}

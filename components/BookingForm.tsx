@@ -6,6 +6,7 @@ import ScrollReveal from './ScrollReveal';
 interface BookingFormProps {
   cars: Car[];
   selectedCarId: string | null;
+  defaultCity?: string;
 }
 
 const DELIVERY_CITIES = [
@@ -18,7 +19,7 @@ const DELIVERY_CITIES = [
   
 ];
 
-const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
+const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId, defaultCity }) => {
   // Helper to get date string YYYY-MM-DD
   const getToday = () => new Date().toISOString().split('T')[0];
   const getTomorrow = () => {
@@ -34,7 +35,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
     carId: selectedCarId || '',
     pickupDate: getToday(),
     dropoffDate: getTomorrow(),
-    delivery: ''
+    delivery: defaultCity || ''
   });
 
   const [days, setDays] = useState<number>(1);
@@ -50,6 +51,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ cars, selectedCarId }) => {
       if (element) element.scrollIntoView({ behavior: 'smooth' });
     }
   }, [selectedCarId]);
+
+  // Sync defaultCity changes
+  useEffect(() => {
+    if (defaultCity) {
+      setFormData(prev => ({ ...prev, delivery: defaultCity }));
+    }
+  }, [defaultCity]);
 
   // Recalculate days and totals
   useEffect(() => {
@@ -176,10 +184,11 @@ Merci de me confirmer la disponibilité.`;
                   
                   {/* Name */}
                   <div>
-                    <label className={labelStyle}>
+                    <label htmlFor="booking-name" className={labelStyle}>
                       <User size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Nom Complet
                     </label>
                     <input
+                      id="booking-name"
                       required
                       type="text"
                       name="name"
@@ -192,10 +201,11 @@ Merci de me confirmer la disponibilité.`;
 
                   {/* Car Selection */}
                   <div>
-                    <label className={labelStyle}>
+                    <label htmlFor="booking-car" className={labelStyle}>
                       <CarIcon size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Véhicule Souhaité
                     </label>
                     <select
+                      id="booking-car"
                       name="carId"
                       value={formData.carId}
                       onChange={handleChange}
@@ -213,10 +223,11 @@ Merci de me confirmer la disponibilité.`;
 
                   {/* Delivery */}
                   <div>
-                    <label className={labelStyle}>
+                    <label htmlFor="booking-delivery" className={labelStyle}>
                       <MapPin size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Livraison
                     </label>
                     <select
+                      id="booking-delivery"
                       name="delivery"
                       value={formData.delivery}
                       onChange={handleChange}
@@ -233,10 +244,11 @@ Merci de me confirmer la disponibilité.`;
                   {/* Dates - FORCED 2 COLUMNS ON MOBILE */}
                   <div className="grid grid-cols-2 gap-3 md:gap-6">
                     <div>
-                      <label className={labelStyle}>
+                      <label htmlFor="booking-pickup" className={labelStyle}>
                         <Calendar size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Départ
                       </label>
                       <input
+                        id="booking-pickup"
                         required
                         type="date"
                         name="pickupDate"
@@ -246,10 +258,11 @@ Merci de me confirmer la disponibilité.`;
                       />
                     </div>
                     <div>
-                      <label className={labelStyle}>
+                      <label htmlFor="booking-dropoff" className={labelStyle}>
                         <Calendar size={16} className="text-gold-500 md:w-[18px] md:h-[18px]"/> Retour
                       </label>
                       <input
+                        id="booking-dropoff"
                         required
                         type="date"
                         name="dropoffDate"

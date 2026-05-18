@@ -11,6 +11,9 @@ import Footer from './components/Footer';
 import LoadingSpinner from './components/LoadingSpinner';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
+import LocationLandingPage from './components/LocationLandingPage';
 import { Phone } from 'lucide-react';
 import { supabase } from './lib/supabaseClient';
 import { Car, SupabaseCar } from './types';
@@ -212,6 +215,9 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/location/:citySlug" element={<LocationLandingPage />} />
         <Route
           path="/dashboard"
           element={
