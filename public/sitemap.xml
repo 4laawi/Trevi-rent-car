@@ -1,45 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Home -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/</loc>
-    <lastmod>2024-12-19</lastmod>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Casablanca Center -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/location/casablanca</loc>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.trevirentcarlocation.ma/location/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.trevirentcarlocation.ma/location/casablanca-ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.trevirentcarlocation.ma/location/casablanca"/>
   </url>
+
+  <!-- Casablanca Airport -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/location/casablanca-aeroport</loc>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Casablanca No Deposit -->
+  <url>
+    <loc>https://www.trevirentcarlocation.ma/location/casablanca-sans-caution</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Casablanca Arabic -->
+  <url>
+    <loc>https://www.trevirentcarlocation.ma/location/casablanca-ar</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.trevirentcarlocation.ma/location/casablanca"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.trevirentcarlocation.ma/location/casablanca-ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.trevirentcarlocation.ma/location/casablanca"/>
+  </url>
+
+  <!-- Marrakech -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/location/marrakech</loc>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Tanger -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/location/tanger</loc>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Rabat Center -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/location/rabat</loc>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Rabat-Sale Airport -->
+  <url>
+    <loc>https://www.trevirentcarlocation.ma/location/rabat-sale-aeroport</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Sale -->
+  <url>
+    <loc>https://www.trevirentcarlocation.ma/location/sale</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Agadir -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/location/agadir</loc>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Fes -->
   <url>
     <loc>https://www.trevirentcarlocation.ma/location/fes</loc>
+    <lastmod>2026-05-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-</urlset>
 
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://www.trevirentcarlocation.ma/privacy</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Terms of Service -->
+  <url>
+    <loc>https://www.trevirentcarlocation.ma/terms</loc>
+    <lastmod>2026-05-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>
