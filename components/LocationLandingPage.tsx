@@ -88,10 +88,32 @@ const LocationLandingPage: React.FC = () => {
     
     const twitterUrl = document.querySelector('meta[name="twitter:url"]');
     if (twitterUrl) twitterUrl.setAttribute('content', canonicalUrl);
+
+    // Handle Hreflang Tags for Casablanca dynamic language routing
+    const hreflangElements: HTMLLinkElement[] = [];
+    if (citySlug === 'casablanca' || citySlug === 'casablanca-ar') {
+      const versions = [
+        { lang: 'fr', url: 'https://www.trevirentcarlocation.ma/location/casablanca' },
+        { lang: 'ar', url: 'https://www.trevirentcarlocation.ma/location/casablanca-ar' },
+        { lang: 'x-default', url: 'https://www.trevirentcarlocation.ma/location/casablanca' }
+      ];
+
+      versions.forEach(v => {
+        const link = document.createElement('link');
+        link.setAttribute('rel', 'alternate');
+        link.setAttribute('hreflang', v.lang);
+        link.setAttribute('href', v.url);
+        document.head.appendChild(link);
+        hreflangElements.push(link);
+      });
+    }
     
     window.scrollTo(0, 0);
 
     return () => {
+      // Cleanup hreflang tags on unmount
+      hreflangElements.forEach(el => el.remove());
+      
       // Restore original home values on unmount
       document.title = originalTitle;
       
@@ -330,7 +352,7 @@ const LocationLandingPage: React.FC = () => {
   const { cityName, h1, introDescription, bodyText1, bodyText2, deliveryDetails, branchAddress, phone, faqs } = locationInfo;
 
   return (
-    <div className="font-sans text-gray-900 bg-white min-h-screen">
+    <div className="font-sans text-gray-900 bg-white min-h-screen" dir={citySlug === 'casablanca-ar' ? 'rtl' : 'ltr'}>
       <Navbar />
 
       {/* Hero Section */}
@@ -352,6 +374,53 @@ const LocationLandingPage: React.FC = () => {
             <h1 className="text-3xl md:text-6xl font-serif font-black leading-tight mb-4 tracking-tight">
               {h1}
             </h1>
+            {citySlug && ['casablanca', 'casablanca-aeroport', 'casablanca-ar', 'casablanca-sans-caution'].includes(citySlug) && (
+              <div className="flex flex-wrap gap-2 justify-center mb-6 mt-3 max-w-3xl mx-auto">
+                {citySlug !== 'casablanca' && (
+                  <Link to="/location/casablanca" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:text-gold-400 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    🏙️ Casablanca Centre
+                  </Link>
+                )}
+                {citySlug !== 'casablanca-aeroport' && (
+                  <Link to="/location/casablanca-aeroport" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:text-gold-400 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    ✈️ Aéroport CMN
+                  </Link>
+                )}
+                {citySlug !== 'casablanca-sans-caution' && (
+                  <Link to="/location/casablanca-sans-caution" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:text-gold-400 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    🔒 Sans Caution
+                  </Link>
+                )}
+                {citySlug !== 'casablanca-ar' ? (
+                  <Link to="/location/casablanca-ar" className="bg-gold-500/20 hover:bg-gold-500/30 border border-gold-500/40 text-gold-300 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    🌐 Version Arabe / كراء السيارات
+                  </Link>
+                ) : (
+                  <Link to="/location/casablanca" className="bg-gold-500/20 hover:bg-gold-500/30 border border-gold-500/40 text-gold-300 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    🌐 Version Française
+                  </Link>
+                )}
+              </div>
+            )}
+            {citySlug && ['rabat', 'rabat-sale-aeroport', 'sale'].includes(citySlug) && (
+              <div className="flex flex-wrap gap-2 justify-center mb-6 mt-3 max-w-3xl mx-auto">
+                {citySlug !== 'rabat' && (
+                  <Link to="/location/rabat" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:text-gold-400 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    🏙️ Rabat Centre
+                  </Link>
+                )}
+                {citySlug !== 'rabat-sale-aeroport' && (
+                  <Link to="/location/rabat-sale-aeroport" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:text-gold-400 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    ✈️ Aéroport RBA (Salé)
+                  </Link>
+                )}
+                {citySlug !== 'sale' && (
+                  <Link to="/location/sale" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:text-gold-400 text-xs px-4 py-1.5 rounded-full font-bold transition-all shadow-sm">
+                    🏰 Salé Ville
+                  </Link>
+                )}
+              </div>
+            )}
             <p className="text-sm md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 font-medium leading-relaxed">
               {introDescription}
             </p>
@@ -488,7 +557,7 @@ const LocationLandingPage: React.FC = () => {
                         <img 
                           src={car.image} 
                           alt={`${car.make} ${car.model}`} 
-                          className="w-full h-full object-contain p-4 hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                         {car.badge && (
                           <span className="absolute top-4 left-4 bg-gold-500 text-white text-[10px] md:text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow">
@@ -598,7 +667,7 @@ const LocationLandingPage: React.FC = () => {
                 Trevi Car Rental livre vos véhicules gratuitement dans de nombreuses villes et aéroports internationaux à travers le Royaume. Explorez d'autres destinations :
               </p>
               <div className="flex flex-wrap gap-3 md:gap-4 justify-center">
-                {LOCATIONS.filter(loc => loc.slug !== citySlug).map(loc => (
+                {LOCATIONS.filter(loc => loc.slug !== citySlug && loc.isMain !== false).map(loc => (
                   <Link 
                     key={loc.slug} 
                     to={`/location/${loc.slug}`} 

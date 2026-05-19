@@ -18,7 +18,7 @@ export const LOCATIONS: LocationData[] = [
     faqs: [
       {
         question: 'Comment se passe la livraison en centre-ville à Casablanca ?',
-        answer: 'Un agent de notre équipe livre le véhicule directement à l\'adresse de votre choix (hôtel, domicile ou bureau) à l\'heure convenue pour signer le contrat et effectuer l\'état des lieux.'
+        answer: 'Un agent de notre équipe livre le véhicule de location directement à l\'adresse de votre choix (hôtel, domicile, bureau, Maarif ou Gauthier) à l\'heure convenue pour signer le contrat et effectuer l\'état des lieux.'
       },
       {
         question: 'Puis-je restituer la voiture dans une autre ville ?',
@@ -27,6 +27,10 @@ export const LOCATIONS: LocationData[] = [
       {
         question: 'Le service d\'assistance est-il réactif à Casablanca ?',
         answer: 'Absolument, notre service d\'assistance intervient en moins de 30 minutes partout à Casablanca en cas de panne ou de crevaison.'
+      },
+      {
+        question: 'Proposez-vous la location de voiture à Casablanca sans caution ?',
+        answer: 'Comme la majorité des agences professionnelles, une pré-autorisation de caution sur carte de crédit (non débitée) est demandée au départ. Cependant, nous proposons des options de rachat de franchise partielles ou totales permettant de réduire la caution au strict minimum pour une location de voiture à Casablanca en toute sérénité.'
       }
     ]
   },
@@ -56,6 +60,10 @@ export const LOCATIONS: LocationData[] = [
       {
         question: 'Combien de temps prend la signature du contrat à l\'aéroport ?',
         answer: 'La prise en main du véhicule prend généralement moins de 10 minutes, l\'état des lieux et la signature du contrat étant réalisés sur tablette directement au parking.'
+      },
+      {
+        question: 'Comment trouver une location de voiture pas cher à l\'aéroport de Casablanca ?',
+        answer: 'Pour réserver une location de voiture pas cher à l\'aéroport de Casablanca Mohammed V, nous vous conseillons d\'anticiper votre réservation en ligne sur Trevi Car Rental. Nos tarifs tout compris et transparents incluent le kilométrage illimité et l\'assistance 24/7 sans aucun frais caché à l\'arrivée.'
       }
     ]
   },
@@ -201,6 +209,126 @@ export const LOCATIONS: LocationData[] = [
       {
         question: 'Où puis-je garer ma voiture près de la Médina de Fès ?',
         answer: 'Il existe de grands parkings gardés et surveillés 24/7 juste à l\'entrée des portes de la Médina (notamment à Bab Boujloud) pour un tarif très modique.'
+      }
+    ]
+  },
+  {
+    slug: 'casablanca-sans-caution',
+    cityName: 'Casablanca (Sans Caution)',
+    title: 'Location de Voiture Casablanca sans Caution | Trevi Car Rental',
+    metaDescription: 'Louer une voiture à Casablanca sans caution. Découvrez nos formules exclusives avec assurances tout risque et franchise réduite pour louer l\'esprit tranquille.',
+    h1: 'Location de Voiture Casablanca sans Caution',
+    introDescription: 'Profitez d\'un séjour serein dans la métropole marocaine. Trevi Car Rental vous propose des solutions adaptées pour louer un véhicule sans caution exorbitante ou blocage de carte de crédit.',
+    bodyText1: 'Le dépôt de garantie ou caution est souvent un frein majeur lors de la location d\'un véhicule au Maroc. Chez Trevi Car Rental, nous comprenons cette problématique. C\'est pourquoi nous proposons des options d\'assurance complémentaire permettant de réduire drastiquement le montant de votre caution à son strict minimum, voire à zéro sous certaines conditions, tout en restant couvert à 100% contre les imprévus.',
+    bodyText2: 'Que vous soyez un touriste de passage arrivant à l\'aéroport Mohammed V ou un résident local à Maarif, Gauthier ou Anfa, vous pouvez réserver votre voiture l\'esprit léger. Pas de mauvaises surprises au retour : nos états des lieux sont transparents et s\'effectuent en votre présence.',
+    deliveryDetails: 'Livraison gratuite à l\'adresse de votre choix à Casablanca, y compris l\'aéroport Mohammed V (CMN), les gares ferroviaires, votre hôtel ou votre bureau.',
+    branchAddress: 'Angle Boulevard Zerktouni et Rue Anfa, Casablanca, Maroc',
+    phone: '+212 6 16 92 55 72',
+    latitude: 33.5898,
+    longitude: -7.6031,
+    isMain: false,
+    faqs: [
+      {
+        question: 'Comment louer une voiture sans caution à Casablanca ?',
+        answer: 'Pour louer une voiture avec une caution minimale ou nulle, vous pouvez opter pour notre formule d\'assurance premium (rachat de franchise). Cette option couvre les petits incidents et élimine le besoin d\'un dépôt de garantie élevé sur votre carte de crédit.'
+      },
+      {
+        question: 'Quelles cartes bancaires sont acceptées pour la caution minimale ?',
+        answer: 'Nous acceptons toutes les principales cartes bancaires de crédit et de débit nationales et internationales (Visa, Mastercard) pour les formalités de réservation.'
+      },
+      {
+        question: 'Le service de livraison gratuite est-il disponible pour cette formule ?',
+        answer: 'Oui, comme toutes nos réservations, la livraison et la récupération du véhicule sont 100% gratuites à Casablanca centre-ville et à l\'aéroport Mohammed V.'
+      }
+    ]
+  },
+  {
+    slug: 'casablanca-ar',
+    cityName: 'الدار البيضاء',
+    title: 'كراء السيارات الدار البيضاء | أفضل الأسعار في المطار ووسط المدينة',
+    metaDescription: 'كراء السيارات في الدار البيضاء بأفضل الأسعار. خدمة متميزة، سيارات حديثة (اقتصادية، عائلية، رباعية الدفع) مع توصيل مجاني للمطار ووسط المدينة. احجز الآن.',
+    h1: 'كراء السيارات في الدار البيضاء',
+    introDescription: 'مرحبًا بكم في العاصمة الاقتصادية للمغرب. تقدم لكم تريفي لتأجير السيارات حلول تنقل ممتازة وموثوقة لتنقلاتكم المهنية أو الشخصية بأفضل الأسعار.',
+    bodyText1: 'تضمن لكم وكالتنا في الدار البيضاء تجربة كراء سيارات سلسة واحترافية. سواء كنتم بحاجة إلى سيارة صغيرة مرنة للمرور عبر حركة المرور في المعاريف وجوتييه، أو سيارة صالون أنيقة لاجتماعات عملكم في سيدي معروف، فإن أسطولنا مجهز ومصان بدقة لتلبية جميع متطلباتكم.',
+    bodyText2: 'في تريفي لتأجير السيارات، نؤمن بالشفافية الكاملة: الأسعار المعروضة نهائية وبدون رسوم مخفية. بالإضافة إلى ذلك، تشمل خدماتنا خدمة المساعدة على الطريق المتاحة على مدار 24 ساعة طوال أيام الأسبوع في جميع أنحاء الدار البيضاء.',
+    deliveryDetails: 'توصيل مجاني وسريع إلى فندقكم، مكان إقامتكم أو مكتبكم في أي مكان في الدار البيضاء (المعاريف، جوتييه، أنفا، سيدي معروف). الاستلام يتم بمرونة وسرعة.',
+    branchAddress: 'ملتقى شارع الزرقطوني وشارع أنفا، الدار البيضاء، المغرب',
+    phone: '+212 6 16 92 55 72',
+    latitude: 33.5898,
+    longitude: -7.6031,
+    isMain: false,
+    faqs: [
+      {
+        question: 'كيف يتم تسليم السيارة في وسط مدينة الدار البيضاء ؟',
+        answer: 'يقوم أحد وكلائنا بتسليم السيارة مباشرة إلى العنوان الذي تختاره (فندق، منزل، مكتب) في الوقت المتفق عليه لتوقيع العقد وفحص السيارة.'
+      },
+      {
+        question: 'هل يمكنني إرجاع السيارة في مدينة أخرى ؟',
+        answer: 'نعم، من خلال خيار "اتجاه واحد"، يمكنك إرجاع السيارة في مطار الدار البيضاء، مراكش أو الرباط بناءً على طلب مسبق.'
+      },
+      {
+        question: 'هل تقدمون خدمة كراء السيارات بدون كفالة/ضمانة ؟',
+        answer: 'مثل معظم الوكالات المهنية، نطلب تفويضًا مسبقًا للضمان على بطاقة الائتمان (غير مخصوم) عند المغادرة. ومع ذلك، فإننا نقدم خيارات تأمين شاملة تقلل مبلغ الضمان إلى الحد الأدنى لتأجير مريح وآمن.'
+      }
+    ]
+  },
+  {
+    slug: 'rabat-sale-aeroport',
+    cityName: 'Rabat-Salé Aéroport (RBA)',
+    title: 'Location de Voiture Aéroport Rabat-Salé (RBA) | Trevi Rental',
+    metaDescription: 'Location de voiture à l\'Aéroport de Rabat-Salé. Service d\'accueil gratuit à la sortie du terminal (RBA), véhicules neufs au meilleur prix. Réservez en ligne.',
+    h1: 'Location de Voiture Aéroport Rabat-Salé',
+    introDescription: 'Atterrissez à l\'Aéroport international de Rabat-Salé (RBA). Trevi Car Rental met à votre disposition un service d\'accueil personnalisé pour vous livrer votre voiture de location dès votre arrivée.',
+    bodyText1: 'Évitez les tracas des transports et commencez votre voyage d\'affaires ou vos vacances sereinement. Avec notre service de livraison aéroportuaire, un agent Trevi vous attend à la sortie des arrivées muni d\'une pancarte à votre nom. Les formalités contractuelles et l\'état des lieux s\'effectuent directement sur place en moins de 10 minutes.',
+    bodyText2: 'Que vous ayez besoin d\'une petite citadine économique pour arpenter les ruelles historiques ou d\'un SUV spacieux pour voyager confortablement au Maroc, notre flotte répondra à toutes vos exigences de confort et de sécurité.',
+    deliveryDetails: 'Service disponible 24h/24 et 7j/7 calqué sur les horaires de vos vols. Livraison et restitution gratuites devant le terminal de l\'aéroport Rabat-Salé (RBA).',
+    branchAddress: 'Terminal Arrivées, Aéroport Rabat-Salé, Salé, Maroc',
+    phone: '+212 6 16 92 55 72',
+    latitude: 34.0514,
+    longitude: -6.7516,
+    isMain: false,
+    faqs: [
+      {
+        question: 'Où m\'attend le représentant de Trevi Rental à l\'aéroport RBA ?',
+        answer: 'Notre représentant vous attendra directement dans le hall principal des arrivées juste après le contrôle des bagages avec une pancarte indiquant votre nom.'
+      },
+      {
+        question: 'Le prix de la location inclut-il les taxes d\'aéroport ?',
+        answer: 'Oui, chez Trevi Car Rental, tous nos tarifs sont fermes, transparents et incluent la livraison et la restitution à l\'aéroport sans aucun frais caché.'
+      },
+      {
+        question: 'Que se passe-t-il si mon vol de nuit a du retard ?',
+        answer: 'Nous surveillons en temps réel les horaires de vol. Votre agent vous attendra à la sortie du terminal même en cas de retard important.'
+      }
+    ]
+  },
+  {
+    slug: 'sale',
+    cityName: 'Salé',
+    title: 'Location de Voiture Salé | Meilleurs Tarifs | Trevi Car Rental',
+    metaDescription: 'Louez votre voiture à Salé à tarif préférentiel. Livraison gratuite à domicile, Marina de Salé, Tabriquet et environs. Flotte récente, assistance 24/7.',
+    h1: 'Location de Voiture à Salé',
+    introDescription: 'Découvrez Salé, la ville corsaire chargée d\'histoire. Trevi Car Rental vous propose des services de location de voiture premium pour simplifier vos trajets quotidiens et professionnels.',
+    bodyText1: 'Pour vos déplacements à Salé Médina, Tabriquet, Sala Al Jadida ou vers la Marina de Bouregreg, notre agence vous garantit des véhicules récents, climatisés et rigoureusement nettoyés. Louer une voiture à Salé vous offre une indépendance absolue pour relier Rabat et Salé sans subir les contraintes des transports urbains.',
+    bodyText2: 'La transparence est au cœur de notre service : aucun frais caché à la signature, kilométrage illimité inclus et assistance routière disponible 24/7 en cas de besoin pour rouler en toute quiétude.',
+    deliveryDetails: 'Livraison gratuite à votre domicile, bureau, hôtel ou gare ferroviaire partout dans la ville de Salé (Tabriquet, Marina, Bettana, Sala Al Jadida).',
+    branchAddress: 'Marina de Bouregreg, Salé, Maroc',
+    phone: '+212 6 16 92 55 72',
+    latitude: 34.0322,
+    longitude: -6.8188,
+    isMain: false,
+    faqs: [
+      {
+        question: 'La livraison à domicile est-elle gratuite à Salé ?',
+        answer: 'Oui, nous livrons et récupérons gratuitement votre véhicule de location à l\'adresse de votre choix à Salé (quartiers résidentiels, hôtels, gares).'
+      },
+      {
+        question: 'Puis-je traverser le pont pour aller à Rabat avec la voiture ?',
+        answer: 'Absolument. Nos véhicules disposent d\'un kilométrage illimité, ce qui vous permet de naviguer librement entre Salé, Rabat et tout le reste du Maroc.'
+      },
+      {
+        question: 'Comment réserver un véhicule à la gare de Salé Tabriquet ?',
+        answer: 'Indiquez simplement "Gare Salé Tabriquet" comme point de livraison lors de votre réservation en ligne. Notre agent vous y accueillera avec la voiture.'
       }
     ]
   }

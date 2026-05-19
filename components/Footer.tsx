@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
           <div className="text-center md:text-left">
             <h4 className="text-lg font-bold mb-4 text-gold-500">Nos Agences</h4>
             <ul className="space-y-3 text-sm text-gray-400">
-              {LOCATIONS.map(loc => (
+              {LOCATIONS.filter(loc => loc.isMain !== false).map(loc => (
                 <li key={loc.slug}>
                   <Link to={`/location/${loc.slug}`} className="hover:text-white transition-colors">
                     Location voiture {loc.cityName}

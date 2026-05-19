@@ -76,4 +76,5 @@ export interface LocationData {
   latitude: number;
   longitude: number;
   faqs: LocationFAQ[];
+  isMain?: boolean;
 }
