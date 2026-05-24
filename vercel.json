@@ -1,6 +1,10 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/((?!privacy|terms|login|location/|assets/|.*\\..*).*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {

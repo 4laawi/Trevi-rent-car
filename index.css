@@ -1,5 +1,67 @@
 @import "tailwindcss";
 
+/* --- LOCAL FONTS SYSTEM --- */
+
+/* lato-300 - latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/lato-v25-latin-300.woff2') format('woff2'),
+       url('/fonts/lato-v25-latin-300.ttf') format('truetype');
+}
+
+/* lato-regular - latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/lato-v25-latin-regular.woff2') format('woff2'),
+       url('/fonts/lato-v25-latin-regular.ttf') format('truetype');
+}
+
+/* lato-700 - latin */
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/lato-v25-latin-700.woff2') format('woff2'),
+       url('/fonts/lato-v25-latin-700.ttf') format('truetype');
+}
+
+/* playfair-display-regular - latin */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/playfair-display-v40-latin-regular.woff2') format('woff2'),
+       url('/fonts/playfair-display-v40-latin-regular.ttf') format('truetype');
+}
+
+/* playfair-display-600 - latin */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/playfair-display-v40-latin-600.woff2') format('woff2'),
+       url('/fonts/playfair-display-v40-latin-600.ttf') format('truetype');
+}
+
+/* playfair-display-700 - latin */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/playfair-display-v40-latin-700.woff2') format('woff2'),
+       url('/fonts/playfair-display-v40-latin-700.ttf') format('truetype');
+}
+
 @theme {
   --color-gold-400: #fbbf24;
   --color-gold-500: #f59e0b;
