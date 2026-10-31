@@ -656,6 +656,39 @@ const LocationLandingPage: React.FC = () => {
             ))}
           </div>
 
+          {/* Bottom Editorial Block for Casablanca Sans Caution */}
+          {citySlug === 'casablanca-sans-caution' && (
+            <ScrollReveal animation="fade-up" duration={800}>
+              <div className="mt-8 bg-white border border-gray-100 p-6 md:p-8 rounded-2xl shadow-sm">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-gold-50 text-gold-600 flex items-center justify-center shrink-0">
+                    <Compass size={20} />
+                  </div>
+                  <div>
+                    <span className="block text-xs text-gold-600 font-bold uppercase tracking-wider">
+                      Conseil & Recommandation Voyage
+                    </span>
+                    <h3 className="text-base md:text-lg font-serif font-bold text-gray-900">
+                      Alternative de transport pour les longs trajets interurbains
+                    </h3>
+                  </div>
+                </div>
+                <p className="text-gray-600 text-xs md:text-sm leading-relaxed mt-2">
+                  La formule de location de voiture sans caution est idéale pour circuler librement dans le Grand Casablanca et le long de la côte atlantique sans bloquer de dépôt de garantie. En revanche, pour vos excursions lointaines vers les villes impériales ou si vous préférez éviter le stress de la route : If you prefer not to drive yourself or deal with highway fatigue and tolls on long trips, we recommend booking a door-to-door{' '}
+                  <a 
+                    href="https://mdinatours.com/en/transfers/casablanca-to-fes-transfer" 
+                    target="_blank" 
+                    rel="noopener"
+                    className="text-gold-600 hover:text-gold-700 font-semibold underline decoration-gold-400 underline-offset-2 transition-colors"
+                  >
+                    private transfer from Casablanca to Fes
+                  </a>{' '}
+                  with an experienced professional driver. Une alternative sereine pour voyager de porte à porte sans contrainte.
+                </p>
+              </div>
+            </ScrollReveal>
+          )}
+
           {/* Hub-and-Spoke Internal Link Infrastructure */}
           <ScrollReveal animation="fade-up" duration={800}>
             <div className="bg-white border border-gray-100 p-6 md:p-10 rounded-2xl text-center mt-20 shadow-md">
